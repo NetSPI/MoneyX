@@ -1,0 +1,15 @@
+.front-icon-large {
+	font-size: 5em;
+	text-align: center;
+}
+
+.footer-container {
+	background-color: #cccccc;
+	height: 100px;
+	margin-top: 20px;
+	padding-top: 30px;
+}
+
+.footer-image {
+	width: 250px;
+}
