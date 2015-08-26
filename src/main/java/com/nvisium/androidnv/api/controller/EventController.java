@@ -4,7 +4,6 @@ import java.math.BigDecimal;
 import java.util.LinkedList;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.web.bind.annotation.AuthenticationPrincipal;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -15,7 +14,6 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import com.nvisium.androidnv.api.model.Event;
 import com.nvisium.androidnv.api.model.EventMembership;
-import com.nvisium.androidnv.api.model.User;
 import com.nvisium.androidnv.api.security.SecurityUtils;
 import com.nvisium.androidnv.api.service.EventService;
 import com.nvisium.androidnv.api.service.UserService;
@@ -77,7 +75,6 @@ public class EventController {
 			@RequestParam(value = "amount", required = false) BigDecimal amount,
 			@RequestParam(value = "users", required = false) LinkedList<Long> users,
 			RedirectAttributes redirectAttrs,
-			@AuthenticationPrincipal User user,
 			Model model) {
 		
 		/* If we need anything, let's just take the user to the add page */

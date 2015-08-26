@@ -33,6 +33,9 @@ public class PaymentController {
 			@PathVariable Long id,
 			Model model) {
 		List<Payment> payments = paymentService.getReceivedPayments(id);
+		if (payments.size() == 0) {
+			model.addAttribute("info", "User has not received any payments!");
+		}
 		model.addAttribute("payments", payments);
 		return "payment/list-received";
 	}
@@ -45,6 +48,9 @@ public class PaymentController {
 			@PathVariable Long id,
 			Model model) {
 		List<Payment> payments = paymentService.getSentPayments(id);
+		if (payments.size() == 0) {
+			model.addAttribute("info", "User has not sent any payments!");
+		}
 		model.addAttribute("payments", payments);
 		return "payment/list-sent";
 	}
