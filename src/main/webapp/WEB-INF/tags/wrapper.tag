@@ -42,13 +42,36 @@
           </button>
           <a class="navbar-brand" href="/">MoneyX</a>
         </div>
+        <sec:authorize access="isAuthenticated()">
         <div id="navbar" class="navbar-collapse collapse">
           <ul class="nav navbar-nav">
             <li class="active"><a href="/dashboard">Dashboard</a></li>
-            <li><a href="/event/list-owner">My Events</a></li>
-            <li><a href="/payment/list-received">My Payments</a></li>
+            <li><a href="/event/list-owner/<sec:authentication property="principal.user.id" />">My Events</a></li>
+            <li><a href="/payment/list-received/<sec:authentication property="principal.user.id" />">My Payments</a></li>
+          </ul>
+          <ul class="nav navbar-nav navbar-right">
+            <p class="navbar-text">Hello, <sec:authentication property="principal.username" />!</p>
+            <li class="dropdown">
+              <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">More <span class="caret"></span></a>
+              <ul class="dropdown-menu">
+                <li><a href="#">Profile</a></li>
+                <li><a href="#">Settings</a></li>
+                <li role="separator" class="divider"></li>
+                <li class="dropdown-header">Nav</li>
+                <li><a href="/logout">Sign Out</a></li>
+              </ul>
+            </li>
           </ul>
         </div><!--/.nav-collapse -->
+        </sec:authorize>
+        <sec:authorize access="isAnonymous()">
+        <div id="navbar" class="navbar-collapse collapse">
+          <ul class="nav navbar-nav navbar-right">
+            <a href="/login"><button type="button" class="btn btn-default navbar-btn">Sign in</button></a>
+            <a href="/register"><button type="button" class="btn btn-default navbar-btn">Register</button></a>
+          </ul>
+        </div><!--/.nav-collapse -->
+        </sec:authorize>
       </div>
     </nav>
 
@@ -59,7 +82,6 @@
         ${info}
     </div>
     </c:if>
-    <sec:authentication property="principal.username" />w
       <jsp:doBody/>
     </div> <!-- /container -->
 
