@@ -15,6 +15,7 @@ import com.nvisium.androidnv.api.model.Friend;
 import com.nvisium.androidnv.api.model.FriendRequest;
 import com.nvisium.androidnv.api.repository.FriendRepository;
 import com.nvisium.androidnv.api.repository.FriendRequestRepository;
+import com.nvisium.androidnv.api.repository.UserRepository;
 import com.nvisium.androidnv.api.security.SecurityUtils;
 import com.nvisium.androidnv.api.service.FriendService;
 
@@ -25,6 +26,9 @@ public class FriendServiceImpl implements FriendService {
 	@Autowired
 	SecurityUtils security;
 
+	@Autowired
+	UserRepository userRepository;
+	
 	@Autowired
 	FriendRepository friendRepository;
 
@@ -66,13 +70,13 @@ public class FriendServiceImpl implements FriendService {
 	@Override
 	public List<FriendRequest> getSentFriendRequests() {
 		return friendRequestRepository.findFriendRequestBySender(security
-				.getCurrentUserId());
+				.getSecurityContext().getUser());
 	}
 
 	@Override
 	public List<FriendRequest> getReceivedFriendRequests() {
 		return friendRequestRepository.findFriendRequestByReceiver(security
-				.getCurrentUserId());
+				.getSecurityContext().getUser());
 	}
 
 	// VULN - IDOR
@@ -97,10 +101,10 @@ public class FriendServiceImpl implements FriendService {
 		 * Has invitation already been sent?
 		 */
 		if (friendRequestRepository.findFriendRequestBySenderAndReceiver(
-				receiver, security.getCurrentUserId()) == null) {
+				userRepository.findById(receiver), security.getSecurityContext().getUser()) == null) {
 			FriendRequest friendRequest = new FriendRequest();
-			friendRequest.setSender(security.getCurrentUserId());
-			friendRequest.setReceiver(receiver);
+			friendRequest.setSender(security.getSecurityContext().getUser());
+			friendRequest.setReceiver(userRepository.findById(receiver));
 			friendRequestRepository.save(friendRequest);
 		} else
 			throw new FriendRequestAlreadySentException();

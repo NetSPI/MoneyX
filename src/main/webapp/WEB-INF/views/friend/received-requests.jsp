@@ -14,7 +14,7 @@
         <c:forEach var="req" items="${friendrequests}">
         <tr>
         <td>${req.id}</td>
-        <td>${req.sender}</td>
+        <td>${req.sender.firstname} ${req.sender.lastname}</td>
         <td><a href="/friend/delete-friend-request/${req.id}"><span class="glyphicon glyphicon-remove" aria-hidden="true"></span></a></td>
         <td><a href="/friend/accept-friend-request/${req.id}"><span class="glyphicon glyphicon-ok" aria-hidden="true"></span></a></td>
         </tr>

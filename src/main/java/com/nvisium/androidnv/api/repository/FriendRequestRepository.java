@@ -9,6 +9,7 @@ import org.springframework.data.repository.CrudRepository;
 import org.springframework.stereotype.Repository;
 
 import com.nvisium.androidnv.api.model.FriendRequest;
+import com.nvisium.androidnv.api.model.User;
 
 @Repository
 @Qualifier(value = "friendRequestRepository")
@@ -16,10 +17,10 @@ public interface FriendRequestRepository extends
 		CrudRepository<FriendRequest, Long> {
 
 	@Query("select f from FriendRequest f where f.sender = ?1")
-	public List<FriendRequest> findFriendRequestBySender(Long sender);
+	public List<FriendRequest> findFriendRequestBySender(User sender);
 
 	@Query("select f from FriendRequest f where f.receiver = ?1")
-	public List<FriendRequest> findFriendRequestByReceiver(Long receiver);
+	public List<FriendRequest> findFriendRequestByReceiver(User receiver);
 
 	@Query("select f.sender from FriendRequest f where f.id = ?1")
 	public Long findSenderByFriendRequestId(Long id);
@@ -29,6 +30,6 @@ public interface FriendRequestRepository extends
 	public void deleteFriendRequestById(Long id);
 
 	@Query("select f from FriendRequest f where f.receiver = ?1 and f.sender = ?2")
-	public FriendRequest findFriendRequestBySenderAndReceiver(Long receiver,
-			Long sender);
+	public FriendRequest findFriendRequestBySenderAndReceiver(User receiver,
+			User sender);
 }

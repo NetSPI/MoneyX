@@ -19,11 +19,11 @@ public class FriendRequest {
 	@Version
 	private Long version;
 
-	@Column(name = "sender")
-	private Long receiver;
+	@Column(name = "sender", length = 100000)
+	private User receiver;
 
-	@Column(name = "receiver")
-	private Long sender;
+	@Column(name = "receiver", length = 100000)
+	private User sender;
 
 	public Long getId() {
 		return id;
@@ -41,19 +41,19 @@ public class FriendRequest {
 		this.version = version;
 	}
 
-	public Long getSender() {
+	public User getSender() {
 		return sender;
 	}
 
-	public void setSender(Long sender) {
+	public void setSender(User sender) {
 		this.sender = sender;
 	}
 
-	public Long getReceiver() {
+	public User getReceiver() {
 		return receiver;
 	}
 
-	public void setReceiver(Long receiver) {
+	public void setReceiver(User receiver) {
 		this.receiver = receiver;
 	}
 }
