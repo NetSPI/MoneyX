@@ -13,8 +13,10 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import com.nvisium.androidnv.api.model.Payment;
+import com.nvisium.androidnv.api.security.SecurityUtils;
 import com.nvisium.androidnv.api.service.EventService;
 import com.nvisium.androidnv.api.service.PaymentService;
+import com.nvisium.androidnv.api.service.UserService;
 
 @RequestMapping(value = "/payment")
 @Controller
@@ -22,8 +24,15 @@ public class PaymentController {
 
 	@Autowired
 	PaymentService paymentService;
+	
 	@Autowired
 	EventService eventService;
+	
+	@Autowired
+	UserService userService;
+	
+	@Autowired
+	SecurityUtils security;
 
 	/*
 	 * VULN: IDOR, Get a list of the payment transactions you've received
@@ -54,6 +63,28 @@ public class PaymentController {
 		model.addAttribute("payments", payments);
 		return "payment/list-sent";
 	}
+	
+	@RequestMapping(value = "/balance", method = {RequestMethod.GET, RequestMethod.POST})
+	public String balance(
+			@RequestParam(value = "amount", required = false) BigDecimal amount,
+			@RequestParam(value = "creditcard", required = false) String creditcard,
+			RedirectAttributes redirectAttrs,
+			Model model) {
+		
+		if (creditcard == null || amount == null) {
+			model.addAttribute("user", security.getSecurityContext().getUser());
+			return "payment/balance";
+		}
+		
+		/*
+		 * Credit card validation would be here if this were real :)
+		 */
+		
+		userService.credit(security.getCurrentUserId(), amount);
+		
+		redirectAttrs.addFlashAttribute("success", "Balance updated successfully!");
+		return "redirect:/get-settings";
+	}
 
 	/*
 	 * VULN: IDOR
@@ -63,13 +94,16 @@ public class PaymentController {
 			@RequestParam(value = "event", required = false) Long eventId,
 			@RequestParam(value = "user", required = false) Long userId,
 			@RequestParam(value = "amount", required = false) BigDecimal amount,
-			RedirectAttributes redirectAttrs) {
+			RedirectAttributes redirectAttrs,
+			Model model) {
 		
 		if (eventId == null || userId == null || amount == null) {
 			return "payment/make-payment";
 		}
 		
-		paymentService.makePayment(eventId, amount);
+		if (!paymentService.makePayment(eventId, amount)) {
+			model.addAttribute("danger", "Insufficient funds in your account!");
+		}
 		eventService.deleteEventMembership(eventId, userId);
 		redirectAttrs.addFlashAttribute("success", "Payment sent successfully!");
 		return "redirect:/get-settings";

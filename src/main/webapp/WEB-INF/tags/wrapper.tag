@@ -50,12 +50,13 @@
             <li><a href="/payment/list-received/<sec:authentication property="principal.user.id" />">My Payments</a></li>
           </ul>
           <ul class="nav navbar-nav navbar-right">
-            <p class="navbar-text">Hello, <sec:authentication property="principal.username" />!</p>
+            <p class="navbar-text">Account Balance: $<sec:authentication property="principal.user.balance" /></p>
             <li class="dropdown">
-              <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">More <span class="caret"></span></a>
+              <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">Hello, <sec:authentication property="principal.username" /> <span class="caret"></span></a>
               <ul class="dropdown-menu">
-                <li><a href="#">Profile</a></li>
-                <li><a href="#">Settings</a></li>
+                <li><a href="/profile/<sec:authentication property="principal.user.id" />">Profile</a></li>
+                <li><a href="/get-settings">Settings</a></li>
+                <li><a href="/payment/balance">Update Balance</a></li>
                 <li role="separator" class="divider"></li>
                 <li class="dropdown-header">Nav</li>
                 <li><a href="/logout">Sign Out</a></li>
@@ -103,6 +104,23 @@
     <script src="/dist/js/bootstrap.min.js"></script>
     <!-- IE10 viewport hack for Surface/desktop Windows 8 bug -->
     <script src="/dist/assets/js/ie10-viewport-bug-workaround.js"></script>
+
+    <script src="/dist/js/jquery.card.js"></script>
+    <script>
+    $('.payment-cc-form').card({
+        // a selector or DOM element for the container
+        // where you want the card to appear
+        container: '.card-wrapper', // *required*
+        formSelectors: {
+          numberInput: 'input#creditcard', // optional — default input[name="number"]
+          expiryInput: 'input#expirationdate', // optional — default input[name="expiry"]
+          cvcInput: 'input#cvccode', // optional — default input[name="cvc"]
+          nameInput: 'input#fullname' // optional - defaults input[name="name"]
+        },
+
+        // all of the other options from above
+    });
+    </script>
   </body>
 </html>
 

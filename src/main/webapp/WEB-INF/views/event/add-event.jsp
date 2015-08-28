@@ -15,7 +15,7 @@
             <label for="amount" class="sr-only">Amount</label>
             <div class="input-group">
                 <div class="input-group-addon">$</div>
-                <input type="number" id="amount" name="amount" class="form-control" placeholder="Amount" required>
+                <input type="number" id="amount" name="amount" class="form-control" step="0.01" placeholder="Amount" required>
             </div>
 
             <hr />

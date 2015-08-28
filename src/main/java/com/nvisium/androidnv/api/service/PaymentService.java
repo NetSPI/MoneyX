@@ -7,7 +7,7 @@ import com.nvisium.androidnv.api.model.Payment;
 
 public interface PaymentService {
 
-	public void makePayment(Long eventId, BigDecimal amount);
+	public boolean makePayment(Long eventId, BigDecimal amount);
 
 	public List<Payment> getSentPayments(Long user);
 

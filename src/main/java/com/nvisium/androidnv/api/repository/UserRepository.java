@@ -1,5 +1,6 @@
 package com.nvisium.androidnv.api.repository;
 
+import java.math.BigDecimal;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Qualifier;
@@ -7,6 +8,7 @@ import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.CrudRepository;
 import org.springframework.stereotype.Repository;
+import org.springframework.transaction.annotation.Transactional;
 
 import com.nvisium.androidnv.api.model.User;
 
@@ -53,4 +55,9 @@ public interface UserRepository extends CrudRepository<User, Long> {
 
 	@Query("select u from User u where u.privacyEnabled = false")
 	public List<User> getUsersByPrivacyDisabled();
+	
+	@Modifying
+	@Transactional
+	@Query("update User u set u.balance = u.balance + ?2 where u.id = ?1")
+	public void updateBalance(Long id, BigDecimal amount);
 }

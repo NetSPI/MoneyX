@@ -11,6 +11,7 @@ import com.nvisium.androidnv.api.model.Payment;
 import com.nvisium.androidnv.api.repository.EventMembershipRepository;
 import com.nvisium.androidnv.api.repository.EventRepository;
 import com.nvisium.androidnv.api.repository.PaymentRepository;
+import com.nvisium.androidnv.api.repository.UserRepository;
 import com.nvisium.androidnv.api.security.SecurityUtils;
 import com.nvisium.androidnv.api.service.PaymentService;
 
@@ -20,20 +21,31 @@ public class PaymentServiceImpl implements PaymentService {
 
 	@Autowired
 	private PaymentRepository paymentRepository;
+	
 	@Autowired
 	private EventMembershipRepository eventMembershipRepository;
+	
 	@Autowired
 	private EventRepository eventRepository;
+	
+	@Autowired
+	private UserRepository userRepository;
+	
 	@Autowired
 	SecurityUtils security;
 
 	@Override
-	public void makePayment(Long eventId, BigDecimal amount) {
+	public boolean makePayment(Long eventId, BigDecimal amount) {
 		Payment payment = new Payment();
+		
+		if (amount.compareTo(userRepository.findById(security.getCurrentUserId()).getBalance()) == 1) {
+			return false;
+		}
 
 		payment.populatePayment(eventId, amount, security.getCurrentUserId(),
 				eventRepository.getEventOwnerIdByEventId(eventId));
 		paymentRepository.save(payment);
+		return true;
 	}
 
 	@Override

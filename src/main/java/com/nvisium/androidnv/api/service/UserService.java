@@ -1,5 +1,6 @@
 package com.nvisium.androidnv.api.service;
 
+import java.math.BigDecimal;
 import java.util.List;
 
 import org.springframework.security.core.userdetails.UserDetails;
@@ -25,4 +26,8 @@ public interface UserService extends UserDetailsService {
 	public boolean doesUserExist(String username);
 	
 	public List<User> getPublicUsers();
+	
+	public void credit(Long id, BigDecimal amount);
+	
+	public boolean debit(Long id, BigDecimal amount);
 }

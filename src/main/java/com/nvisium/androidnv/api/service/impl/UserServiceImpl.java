@@ -1,5 +1,6 @@
 package com.nvisium.androidnv.api.service.impl;
 
+import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
@@ -95,6 +96,21 @@ public class UserServiceImpl implements UserService {
 	@Override
 	public List<User> getPublicUsers() {
 		return accountRepository.getUsersByPrivacyDisabled();
+	}
+
+	@Override
+	public void credit(Long id, BigDecimal amount) {
+		accountRepository.updateBalance(id, amount);
+	}
+
+	@Override
+	public boolean debit(Long id, BigDecimal amount) {
+		User u = accountRepository.findById(id);
+		if (u.getBalance().compareTo(amount) == -1) {
+			accountRepository.updateBalance(id, amount.negate());
+			return true;
+		}
+		return false;
 	}
 
 }

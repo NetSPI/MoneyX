@@ -1,6 +1,7 @@
 package com.nvisium.androidnv.api.model;
 
 import java.io.Serializable;
+import java.math.BigDecimal;
 import java.util.HashSet;
 import java.util.Set;
 
@@ -64,6 +65,9 @@ public class User implements Serializable {
 
 	@Column(name = "credit_card")
 	private Long creditCard;
+	
+	@Column(name = "balance")
+	private BigDecimal balance;
 
 	@OneToMany(mappedBy = "user")
 	private Set<Role> roles;
@@ -127,6 +131,14 @@ public class User implements Serializable {
 	public void setCreditCard(Long creditCard) {
 		this.creditCard = creditCard;
 	}
+	
+	public BigDecimal getBalance() {
+		return balance;
+	}
+
+	public void setBalance(BigDecimal balance) {
+		this.balance = balance;
+	}
 
 	public String getEmail() {
 		return email;
@@ -165,6 +177,7 @@ public class User implements Serializable {
 		roles.add(new Role("USER", this));
 		this.setRoles(roles);
 		this.setPrivacyEnabled(false);
+		this.balance = new BigDecimal(0.0);
 	}
 
 	public boolean isAccountNonExpired() {
