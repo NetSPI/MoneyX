@@ -116,6 +116,7 @@ public class UserServiceImpl implements UserService {
 		User u = accountRepository.findById(id);
 		if (u.getBalance().compareTo(amount) == -1) {
 			credit(id, amount.negate());
+			
 			return true;
 		}
 		return false;

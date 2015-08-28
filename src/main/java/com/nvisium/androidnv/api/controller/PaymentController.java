@@ -4,6 +4,10 @@ import java.math.BigDecimal;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -83,6 +87,11 @@ public class PaymentController {
 		
 		userService.credit(security.getCurrentUserId(), amount);
 		
+		UserDetails currentUser = userService.loadUserByUsername(security.getSecurityContext().getUsername());
+		
+		Authentication authentication = new UsernamePasswordAuthenticationToken(currentUser, currentUser.getPassword(), currentUser.getAuthorities());
+		SecurityContextHolder.getContext().setAuthentication(authentication);
+		
 		redirectAttrs.addFlashAttribute("success", "Balance updated successfully!");
 		return "redirect:/get-settings";
 	}
@@ -109,6 +118,11 @@ public class PaymentController {
 			model.addAttribute("memberships", memberships);
 			return "payment/make-payment";
 		}
+		
+		UserDetails currentUser = userService.loadUserByUsername(security.getSecurityContext().getUsername());
+		
+		Authentication authentication = new UsernamePasswordAuthenticationToken(currentUser, currentUser.getPassword(), currentUser.getAuthorities());
+		SecurityContextHolder.getContext().setAuthentication(authentication);
 		
 		redirectAttrs.addFlashAttribute("success", "Payment sent successfully!");
 		return "redirect:/dashboard";

@@ -59,10 +59,11 @@ public class PaymentServiceImpl implements PaymentService {
 				eventRepository.getEventOwnerIdByEventId(eventId));
 		paymentRepository.save(payment);
 		
-		eventMembershipRepository.makePayment(eventId, security.getCurrentUserId(), eventMembership.getAmount().min(amount));
-		userService.debit(security.getCurrentUserId(), eventMembership.getAmount().min(amount));
+		BigDecimal paidAmount = eventMembership.getAmount().min(amount);
 		
-		if (eventMembership.getAmount().compareTo(BigDecimal.ZERO) != 1) {
+		userService.debit(security.getCurrentUserId(), paidAmount);
+		
+		if (eventMembership.getAmount().compareTo(paidAmount) != 1) {
 			eventMembershipRepository.delete(eventMembership);
 			/* Is the greater event done too? */
 			if (eventMembershipRepository.findEventMembershipsByEventId(eventId).size() == 0) {
@@ -70,6 +71,8 @@ public class PaymentServiceImpl implements PaymentService {
 				event.setCompleted(true);
 				eventRepository.save(event);
 			}
+		} else {
+			eventMembershipRepository.makePayment(eventId, security.getCurrentUserId(), paidAmount);
 		}
 		
 		return true;
