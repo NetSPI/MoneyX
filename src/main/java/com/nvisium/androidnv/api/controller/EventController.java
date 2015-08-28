@@ -101,7 +101,7 @@ public class EventController {
 	@RequestMapping(value = "/delete/{id}", method = RequestMethod.GET)
 	public String delete(@PathVariable Long id) {
 		eventService.deleteEvent(id);
-		return "event/event-deleted";
+		return "redirect:/event/list-owner/" + security.getCurrentUserId();
 	}
 
 	/*

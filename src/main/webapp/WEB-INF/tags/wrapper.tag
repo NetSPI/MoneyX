@@ -46,8 +46,20 @@
         <div id="navbar" class="navbar-collapse collapse">
           <ul class="nav navbar-nav">
             <li class="active"><a href="/dashboard">Dashboard</a></li>
-            <li><a href="/event/list-owner/<sec:authentication property="principal.user.id" />">My Events</a></li>
-            <li><a href="/payment/list-received/<sec:authentication property="principal.user.id" />">My Payments</a></li>
+            <li><a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">Events<span class="caret"></span></a>
+            	<ul class="dropdown-menu">
+            		<li><a href="/event/list-owner/<sec:authentication property="principal.user.id" />">My Events</a></li>
+            		<li><a href="/event/list-member/<sec:authentication property="principal.user.id" />">Member Events</a></li>
+            		<li><a href="/event/add">Add Payment Event</a></li>
+            	</ul>
+            </li>
+            <li><a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">Payments<span class="caret"></span></a>
+            	<ul class="dropdown-menu">
+            		<li><a href="/payment/list-received/<sec:authentication property="principal.user.id" />">Payments Received</a></li>
+            		<li><a href="/payment/list-sent/<sec:authentication property="principal.user.id" />">Payments Sent</a></li>
+            		<li><a href="/payment/make-payment">Make a Payment</a></li>
+            	</ul>
+            </li>
             <li><a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">Friends<span class="caret"></span></a>
             	<ul class="dropdown-menu">
             		<li><a href="/friend/get-friends">My Friends</a></li>
