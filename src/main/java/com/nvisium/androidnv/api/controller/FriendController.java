@@ -24,7 +24,7 @@ public class FriendController {
 	
 	@Autowired
 	UserService userService;
-
+	
 	/*
 	 * VULN - CSRF, shouldn't be able to call this with GET
 	 */
@@ -34,14 +34,14 @@ public class FriendController {
 			Model model) {
 		
 		if (friend == 0) {
-			return "friend/delete-friend";
+			return listFriends(model);
 		}
 		
 		friendService.deleteFriend(friend);
 		model.addAttribute("success", "Friend was successfully removed");
-		return "friend/delete-friend";
+		return listFriends(model);
 	}
-
+	
 	@RequestMapping(value = "/get-friends", method = RequestMethod.GET)
 	public String listFriends(
 			Model model) {
@@ -61,8 +61,8 @@ public class FriendController {
 		return "friend/received-requests";
 	}
 
-	@RequestMapping(value = "/send-friend-request", method = RequestMethod.POST)
-	public String send(@RequestParam("receiver") Long receiver, Model model) {
+	@RequestMapping(value = "/send-friend-request/{receiver}", method = RequestMethod.GET)
+	public String send(@PathVariable Long receiver, Model model) {
 		try {
 			friendService.sendFriendRequest(receiver);
 			model.addAttribute("success", "User has been sent a friend request!");
@@ -71,13 +71,13 @@ public class FriendController {
 		} catch (InvalidFriendRequestException e) {
 			model.addAttribute("error", "Cannot send friend request!");
 		}
-		return "friend/new-friend";
+		return listSentFriendRequests(model);
 	}
 
 	/*
 	 * VULN - IDOR and CSRF
 	 */
-	@RequestMapping(value = "/accept-friend-request/{id}", method = RequestMethod.POST)
+	@RequestMapping(value = "/accept-friend-request/{id}", method = RequestMethod.GET)
 	public String accept(@PathVariable Long id, Model model) {
 		Long sender = friendService.getFriendRequestSenderId(id);
 		try {
@@ -89,15 +89,17 @@ public class FriendController {
 		} catch (InvalidFriendException e) {
 			model.addAttribute("error", "Cannot accept friend request!");
 		}
-		return "friend/new-friend";
+		return listFriends(model);
 	}
 
 	/*
 	 * VULN - IDOR and CSRF
 	 */
 	@RequestMapping(value = "/delete-friend-request/{id}", method = RequestMethod.GET)
-	public String delete(@PathVariable Long id) {
+	public String delete(@PathVariable Long id, Model model) {
 		friendService.deleteFriendRequest(id);
-		return "friend/request-deleted";
+		model.addAttribute("success","Deleted the friend request.");
+		
+		return listFriends(model);
 	}
 }

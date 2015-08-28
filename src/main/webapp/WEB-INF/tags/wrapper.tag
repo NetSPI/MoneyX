@@ -48,6 +48,14 @@
             <li class="active"><a href="/dashboard">Dashboard</a></li>
             <li><a href="/event/list-owner/<sec:authentication property="principal.user.id" />">My Events</a></li>
             <li><a href="/payment/list-received/<sec:authentication property="principal.user.id" />">My Payments</a></li>
+            <li><a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">Friends<span class="caret"></span></a>
+            	<ul class="dropdown-menu">
+            		<li><a href="/friend/get-friends">My Friends</a></li>
+            		<li><a href="/get-public-users">All Users</a>
+            		<li><a href="/friend/list-sent-friend-requests">Requests Sent</a></li>
+            		<li><a href="/friend/list-received-friend-requests">Requests Received</a></li>
+            	</ul>
+            </li>
           </ul>
           <ul class="nav navbar-nav navbar-right">
             <p class="navbar-text">Account Balance: $<sec:authentication property="principal.user.balance" /></p>
