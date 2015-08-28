@@ -98,7 +98,7 @@ public class PaymentController {
 	/*
 	 * VULN: IDOR
 	 */
-	@RequestMapping(value = "/make-payment", method = RequestMethod.POST)
+	@RequestMapping(value = "/make-payment", method = {RequestMethod.GET, RequestMethod.POST})
 	public String makePayment(
 			@RequestParam(value = "event", required = false) Long eventId,
 			@RequestParam(value = "user", required = false) Long userId,
@@ -106,15 +106,19 @@ public class PaymentController {
 			RedirectAttributes redirectAttrs,
 			Model model) {
 		
-		if (eventId == null || userId == null || amount == null) {
+		/* if (eventId == null || userId == null || amount == null) { */
+		if (userId == null || amount == null) {
+			model.addAttribute("users", userService.getPublicUsers());
 			return "payment/make-payment";
 		}
+		
+		// Holy crap, this logic is broken. why events here? not users?
 		
 		if (!paymentService.makePayment(eventId, amount)) {
 			model.addAttribute("danger", "Insufficient funds in your account!");
 		}
 		eventService.deleteEventMembership(eventId, userId);
 		redirectAttrs.addFlashAttribute("success", "Payment sent successfully!");
-		return "redirect:/get-settings";
+		return "redirect:/dashboard";
 	}
 }
