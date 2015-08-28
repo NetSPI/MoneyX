@@ -58,7 +58,7 @@
                 <li><a href="/get-settings">Settings</a></li>
                 <li><a href="/payment/balance">Update Balance</a></li>
                 <li role="separator" class="divider"></li>
-                <li class="dropdown-header">Nav</li>
+                <li class="dropdown-header">Account</li>
                 <li><a href="/logout">Sign Out</a></li>
               </ul>
             </li>
@@ -78,6 +78,16 @@
 
     <div class="container" role="main">
 
+    <c:if test="${not empty danger}">
+    <div class="alert alert-danger alert-dismissible" role="danger">
+        ${danger}
+    </div>
+    </c:if>
+    <c:if test="${not empty success}">
+    <div class="alert alert-success alert-dismissible" role="success">
+        ${success}
+    </div>
+    </c:if>
     <c:if test="${not empty info}">
     <div class="alert alert-info alert-dismissible" role="info">
         ${info}

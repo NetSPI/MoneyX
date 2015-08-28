@@ -11,6 +11,7 @@ import org.springframework.web.servlet.ModelAndView;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import com.nvisium.androidnv.api.model.User;
+import com.nvisium.androidnv.api.security.SecurityUtils;
 import com.nvisium.androidnv.api.service.UserService;
 
 @Controller
@@ -18,6 +19,9 @@ public class UserController {
 
 	@Autowired
 	UserService userService;
+	
+	@Autowired
+	SecurityUtils security;
 
 	/*
 	 * Log into the application, authentication itself is handled by Spring Session,
@@ -96,8 +100,9 @@ public class UserController {
 	 * TODO: Finish me
 	 */
 	@RequestMapping(value = "/get-settings", method = RequestMethod.GET)
-	public String getSettings(User user) {
+	public String getSettings(Model model) {
 
+		model.addAttribute("user", security.getSecurityContext().getUser());
 		return "user/settings";
 	}
 
@@ -105,9 +110,23 @@ public class UserController {
 	 * Update settings
 	 */
 	@RequestMapping(value = "/update-settings", method = RequestMethod.GET)
-	public String updateSettings(User user) {
-
-		return "user/update-settings";
+	public String updateSettings(
+			@RequestParam(value = "oldpassword") String oldpassword,
+			@RequestParam(value = "newpassword") String newpassword,
+			@RequestParam(value = "confirmpassword") String confirmpassword,
+			RedirectAttributes redirectAttrs,
+			Model model) {
+		
+		if (security.getSecurityContext().getUser().getPassword().equals(oldpassword)) {
+			/* Do the two passwords match? */
+			if (newpassword.equals(confirmpassword)) {
+				userService.updatePasswordById(newpassword);
+				redirectAttrs.addFlashAttribute("success", "Successfully changed password!");
+				return "redirect:/get-settings";
+			}
+		}
+		redirectAttrs.addFlashAttribute("danger", "Unable to change password!");
+		return "redirect:/get-settings";
 	}
 	
 }
