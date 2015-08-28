@@ -109,4 +109,9 @@ public class EventServiceImpl implements EventService {
 		return users;
 		
 	}
+
+	@Override
+	public List<EventMembership> getMembershipsByEvent(Long eventId) {
+		return eventMembershipRepository.findEventMembershipsByEventId(eventId);
+	}
 }

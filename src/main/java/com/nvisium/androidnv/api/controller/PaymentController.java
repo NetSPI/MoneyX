@@ -4,10 +4,6 @@ import java.math.BigDecimal;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
-import org.springframework.security.core.Authentication;
-import org.springframework.security.core.context.SecurityContextHolder;
-import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -16,6 +12,7 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
+import com.nvisium.androidnv.api.model.EventMembership;
 import com.nvisium.androidnv.api.model.Payment;
 import com.nvisium.androidnv.api.security.SecurityUtils;
 import com.nvisium.androidnv.api.service.EventService;
@@ -85,11 +82,6 @@ public class PaymentController {
 		 */
 		
 		userService.credit(security.getCurrentUserId(), amount);
-				
-		UserDetails currentUser = userService.loadUserByUsername(security.getSecurityContext().getUsername());
-		
-		Authentication authentication = new UsernamePasswordAuthenticationToken(currentUser, currentUser.getPassword(), currentUser.getAuthorities());
-		SecurityContextHolder.getContext().setAuthentication(authentication);
 		
 		redirectAttrs.addFlashAttribute("success", "Balance updated successfully!");
 		return "redirect:/get-settings";
@@ -100,21 +92,24 @@ public class PaymentController {
 	 */
 	@RequestMapping(value = "/make-payment", method = {RequestMethod.GET, RequestMethod.POST})
 	public String makePayment(
-			@RequestParam(value = "event", required = false) Long eventId,
-			@RequestParam(value = "user", required = false) Long userId,
+			@RequestParam(value = "membership", required = false) Long eventMembershipId,
 			@RequestParam(value = "amount", required = false) BigDecimal amount,
 			RedirectAttributes redirectAttrs,
 			Model model) {
-		
-		 if (eventId == null || userId == null || amount == null) {
-			model.addAttribute("users", userService.getPublicUsers());
+				
+		 if (eventMembershipId == null || amount == null) {
+			List<EventMembership> memberships = eventService.getEventsByMembership(security.getCurrentUserId());
+			model.addAttribute("memberships", memberships);
 			return "payment/make-payment";
 		}
 				
-		if (!paymentService.makePayment(eventId, amount)) {
+		if (!paymentService.makePayment(eventMembershipId, amount)) {
 			model.addAttribute("danger", "Insufficient funds in your account!");
+			List<EventMembership> memberships = eventService.getEventsByMembership(security.getCurrentUserId());
+			model.addAttribute("memberships", memberships);
+			return "payment/make-payment";
 		}
-		eventService.deleteEventMembership(eventId, userId);
+		
 		redirectAttrs.addFlashAttribute("success", "Payment sent successfully!");
 		return "redirect:/dashboard";
 	}

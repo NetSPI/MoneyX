@@ -7,13 +7,17 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Service;
 
+import com.nvisium.androidnv.api.model.Event;
+import com.nvisium.androidnv.api.model.EventMembership;
 import com.nvisium.androidnv.api.model.Payment;
 import com.nvisium.androidnv.api.repository.EventMembershipRepository;
 import com.nvisium.androidnv.api.repository.EventRepository;
 import com.nvisium.androidnv.api.repository.PaymentRepository;
 import com.nvisium.androidnv.api.repository.UserRepository;
 import com.nvisium.androidnv.api.security.SecurityUtils;
+import com.nvisium.androidnv.api.service.EventService;
 import com.nvisium.androidnv.api.service.PaymentService;
+import com.nvisium.androidnv.api.service.UserService;
 
 @Service
 @Qualifier(value = "paymentService")
@@ -32,11 +36,20 @@ public class PaymentServiceImpl implements PaymentService {
 	private UserRepository userRepository;
 	
 	@Autowired
+	private UserService userService;
+	
+	@Autowired
+	private EventService eventService;
+	
+	@Autowired
 	SecurityUtils security;
 
 	@Override
-	public boolean makePayment(Long eventId, BigDecimal amount) {
+	public boolean makePayment(Long eventMembershipId, BigDecimal amount) {
 		Payment payment = new Payment();
+		
+		EventMembership eventMembership = eventMembershipRepository.findOne(eventMembershipId);
+		Long eventId = eventMembership.getEventId();
 		
 		if (amount.compareTo(userRepository.findById(security.getCurrentUserId()).getBalance()) == 1) {
 			return false;
@@ -45,6 +58,20 @@ public class PaymentServiceImpl implements PaymentService {
 		payment.populatePayment(eventId, amount, security.getCurrentUserId(),
 				eventRepository.getEventOwnerIdByEventId(eventId));
 		paymentRepository.save(payment);
+		
+		eventMembershipRepository.makePayment(eventId, security.getCurrentUserId(), eventMembership.getAmount().min(amount));
+		userService.debit(security.getCurrentUserId(), eventMembership.getAmount().min(amount));
+		
+		if (eventMembership.getAmount().compareTo(BigDecimal.ZERO) != 1) {
+			eventMembershipRepository.delete(eventMembership);
+			/* Is the greater event done too? */
+			if (eventMembershipRepository.findEventMembershipsByEventId(eventId).size() == 0) {
+				Event event = eventRepository.findOne(eventId);
+				event.setCompleted(true);
+				eventRepository.save(event);
+			}
+		}
+		
 		return true;
 	}
 

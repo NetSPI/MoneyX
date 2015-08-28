@@ -27,5 +27,8 @@ public interface EventService {
 
 	public List<EventMembership> getEventsByMembership(Long userId);
 	
+	public List<EventMembership> getMembershipsByEvent(Long eventId);
+	
 	public List<User> getUsersbyEventMembership(Long eventId);
+	
 }

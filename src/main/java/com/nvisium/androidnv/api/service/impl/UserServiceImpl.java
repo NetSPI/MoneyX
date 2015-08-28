@@ -8,8 +8,11 @@ import java.util.Set;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
+import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.core.Authentication;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -101,13 +104,18 @@ public class UserServiceImpl implements UserService {
 	@Override
 	public void credit(Long id, BigDecimal amount) {
 		accountRepository.updateBalance(id, amount);
+		
+		UserDetails currentUser = loadUserByUsername(security.getSecurityContext().getUsername());
+		
+		Authentication authentication = new UsernamePasswordAuthenticationToken(currentUser, currentUser.getPassword(), currentUser.getAuthorities());
+		SecurityContextHolder.getContext().setAuthentication(authentication);
 	}
 
 	@Override
 	public boolean debit(Long id, BigDecimal amount) {
 		User u = accountRepository.findById(id);
 		if (u.getBalance().compareTo(amount) == -1) {
-			accountRepository.updateBalance(id, amount.negate());
+			credit(id, amount.negate());
 			return true;
 		}
 		return false;

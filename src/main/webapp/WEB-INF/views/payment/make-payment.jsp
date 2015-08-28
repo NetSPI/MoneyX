@@ -5,7 +5,7 @@
 
 <t:wrapper>
     <div class="row">
-        <form:form class="form-signin" action="/event/add" modelAttribute="event" method="post">
+        <form:form class="form-signin" action="/payment/make-payment" modelAttribute="payment" method="post">
         <div class="col-md-6">
             <h2 class="form-signin-heading">Make a Payment</h2>
 
@@ -21,9 +21,9 @@
         </div>
         <div class="col-md-6">
             <h3>Choose an event</h3>
-            <select id="event" name="event" multiple class="form-control">
-            <c:forEach var="event-membership" items="${event-memberships}">
-                <option value="${event-membership.id}">$${event-membership.amount}</option>
+            <select id="membership" name="membership" class="form-control">
+            <c:forEach var="membership" items="${memberships}">
+                <option value="${membership.id}">$${membership.amount}</option>
             </c:forEach>
             </select>
         </div>
