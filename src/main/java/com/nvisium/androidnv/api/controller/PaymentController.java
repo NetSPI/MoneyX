@@ -100,9 +100,10 @@ public class PaymentController {
 		/* if (eventId == null || userId == null || amount == null) { */
 		if (userId == null || amount == null) {
 			model.addAttribute("users", userService.getPublicUsers());
-			model.addFlashAttribute("success", "userId ("+userId+") amount ("+amount+")");
 			return "payment/make-payment";
 		}
+		
+		// Holy crap, this logic is broken. why events here? not users?
 		
 		if (!paymentService.makePayment(eventId, amount)) {
 			model.addAttribute("danger", "Insufficient funds in your account!");
