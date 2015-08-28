@@ -23,7 +23,7 @@
             <h3>Choose an event</h3>
             <select id="membership" name="membership" class="form-control">
             <c:forEach var="membership" items="${memberships}">
-                <option value="${membership.id}">$${membership.amount}</option>
+                <option value="${membership.id}"> Name ($${membership.amount})</option>
             </c:forEach>
             </select>
         </div>

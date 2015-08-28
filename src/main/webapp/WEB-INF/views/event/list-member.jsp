@@ -8,12 +8,14 @@
         <tr>
             <th>#</th>
             <th>Total Amount</th>
+            <th>Event Name</th>
             <th>Date Created</th>
         </tr>
         <c:forEach var="event" items="${events}">
         <tr>
         <td>${event.id}</td>
         <td>$${event.amount}</td>
+        <td>NAME</td>
         <td>${event.created}</td>
         </tr>
         </c:forEach>
