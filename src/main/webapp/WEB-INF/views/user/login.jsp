@@ -26,7 +26,7 @@
 
 	<form:form class="form-signin" action="/login" modelAttribute="user"
 		method="post">
-		<h2 class="form-signin-heading">Please sign in</h2>
+		<h2 class="form-signin-heading text-center">MoneyX Sign In</h2>
 
 		<label for="username" class="sr-only">Username</label>
 		<input type="text" id="username" name="username" class="form-control"
@@ -40,12 +40,14 @@
 			<label><input type="checkbox" value="remember-me">
 				Remember me</label>
 		</div>
-		<button class="btn btn-lg btn-primary btn-block" type="submit">Sign
-			in</button>
+		<button class="btn btn-lg btn-primary btn-block" type="submit">Sign in</button><p>
+		<div class="wrapper text-center">
+		<div class="btn-group text-center">
+			<a href="/register" class="btn btn-sm btn-primary">Register</a>
+			<a href="/forgot-password" class="btn btn-sm btn-primary">Forgot Password</a>
+		</div>
+		</div>
 	</form:form>
 
-	<div class="btn-group">
-		<a href="/register" class="btn btn-primary">Register</a>
-		<a href="/forgot-password" class="btn btn-primary">Forgot Password</a>
-	</div>
+
 </t:auth>

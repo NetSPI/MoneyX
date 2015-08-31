@@ -97,7 +97,7 @@ public class PaymentController {
 	}
 
 	/*
-	 * VULN: IDOR
+	 * VULN: IDOR + CSRF
 	 */
 	@RequestMapping(value = "/make-payment", method = {RequestMethod.GET, RequestMethod.POST})
 	public String makePayment(
