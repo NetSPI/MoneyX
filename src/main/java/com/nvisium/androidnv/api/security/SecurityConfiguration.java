@@ -30,14 +30,14 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
 
 	@Override
 	protected void configure(HttpSecurity http) throws Exception {
-		http.authorizeRequests().antMatchers("/register/**", "/dist/**", "/console/**").permitAll()
-		.anyRequest().authenticated()
-		.and().formLogin().loginPage("/login").defaultSuccessUrl("/dashboard").permitAll()
-		.and().logout().permitAll()
-		.and().requestCache()
-		.requestCache(new NullRequestCache())
-		.and().csrf().disable();
-		
+		http.authorizeRequests()
+				.antMatchers("/register/**", "/forgot-password/**", "/dist/**",
+						"/console/**").permitAll().anyRequest().authenticated()
+				.and().formLogin().loginPage("/login")
+				.defaultSuccessUrl("/dashboard").permitAll().and().logout()
+				.permitAll().and().requestCache()
+				.requestCache(new NullRequestCache()).and().csrf().disable();
+
 		http.headers().frameOptions().disable();
 	}
 

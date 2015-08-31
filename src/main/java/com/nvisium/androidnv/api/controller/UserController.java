@@ -19,12 +19,13 @@ public class UserController {
 
 	@Autowired
 	UserService userService;
-	
+
 	@Autowired
 	SecurityUtils security;
 
 	/*
-	 * Log into the application, authentication itself is handled by Spring Session,
+	 * Log into the application, authentication itself is handled by Spring
+	 * Session,
 	 */
 	@RequestMapping(value = "/login", method = RequestMethod.GET)
 	public ModelAndView login() {
@@ -34,55 +35,58 @@ public class UserController {
 	/*
 	 * Logout is also handled by Spring Session
 	 */
-	
+
 	/*
-	 * Register for an account
-	 * VULN - Username enumeration
+	 * Register for an account VULN - Username enumeration
 	 */
-	@RequestMapping(value = "/register", method = {RequestMethod.GET, RequestMethod.POST})
+	@RequestMapping(value = "/register", method = { RequestMethod.GET,
+			RequestMethod.POST })
 	public ModelAndView register(
 			@RequestParam(value = "username", required = false) String username,
 			@RequestParam(value = "password", required = false) String password,
 			@RequestParam(value = "email", required = false) String email,
+			@RequestParam(value = "answer", required = false) String answer,
 			@RequestParam(value = "firstname", required = false) String firstname,
 			@RequestParam(value = "lastname", required = false) String lastname,
-			Model model,
-			RedirectAttributes redirectAttrs) {
-		
-		/* If we need anything, let's just take the user to the registration page */
-		if (username == null || password == null || email == null ||
-				firstname == null || lastname == null) {
+			Model model, RedirectAttributes redirectAttrs) {
+
+		/*
+		 * If we need anything, let's just take the user to the registration
+		 * page
+		 */
+		if (username == null || password == null || email == null
+				|| answer == null || firstname == null || lastname == null) {
 			return new ModelAndView("user/register", "user", new User());
 		}
-		
+
 		/* Validate the user login */
 		if (!userService.doesUserExist(username)) {
-			userService.addRegularUser(username, password, email, firstname,
-					lastname);
-			redirectAttrs.addFlashAttribute("success", "Successfully registered!");
+			userService.addRegularUser(username, password, email, answer,
+					firstname, lastname);
+			redirectAttrs.addFlashAttribute("success",
+					"Successfully registered!");
 			return new ModelAndView("redirect:/login");
 		} else
 			model.addAttribute("error", "Username already taken!");
-			return new ModelAndView("user/register", "user", new User());
+		return new ModelAndView("user/register", "user", new User());
 	}
 
 	/*
-	 * Update the account password
-	 * VULN - CSRF
+	 * Update the account password VULN - CSRF
 	 */
 	@RequestMapping(value = "/update-password/{oldPassword}/{newPassword}", method = RequestMethod.GET)
-	public String updatePassword(
-			@PathVariable String oldPassword,
-			@PathVariable String newPassword,
-			RedirectAttributes redirectAttrs) {
-		
+	public String updatePassword(@PathVariable String oldPassword,
+			@PathVariable String newPassword, RedirectAttributes redirectAttrs) {
+
 		if (userService.validateCurrentPassword(oldPassword)) {
 			userService.updatePasswordById(newPassword);
-			redirectAttrs.addFlashAttribute("success", "Successfully changed password!");
+			redirectAttrs.addFlashAttribute("success",
+					"Successfully changed password!");
 			return "redirect:/get-settings";
 		} else
-			redirectAttrs.addFlashAttribute("error", "Unable to change password!");
-			return "redirect:/get-settings";
+			redirectAttrs.addFlashAttribute("error",
+					"Unable to change password!");
+		return "redirect:/get-settings";
 	}
 
 	/*
@@ -96,8 +100,7 @@ public class UserController {
 	}
 
 	/*
-	 * Get all user settings
-	 * TODO: Finish me
+	 * Get all user settings TODO: Finish me
 	 */
 	@RequestMapping(value = "/get-settings", method = RequestMethod.GET)
 	public String getSettings(Model model) {
@@ -114,19 +117,50 @@ public class UserController {
 			@RequestParam(value = "oldpassword") String oldpassword,
 			@RequestParam(value = "newpassword") String newpassword,
 			@RequestParam(value = "confirmpassword") String confirmpassword,
-			RedirectAttributes redirectAttrs,
-			Model model) {
-		
-		if (security.getSecurityContext().getUser().getPassword().equals(oldpassword)) {
+			RedirectAttributes redirectAttrs, Model model) {
+
+		if (security.getSecurityContext().getUser().getPassword()
+				.equals(oldpassword)) {
 			/* Do the two passwords match? */
 			if (newpassword.equals(confirmpassword)) {
 				userService.updatePasswordById(newpassword);
-				redirectAttrs.addFlashAttribute("success", "Successfully changed password!");
+				redirectAttrs.addFlashAttribute("success",
+						"Successfully changed password!");
 				return "redirect:/get-settings";
 			}
 		}
 		redirectAttrs.addFlashAttribute("danger", "Unable to change password!");
 		return "redirect:/get-settings";
 	}
-	
+
+	/*
+	 * Register for an account VULN - Username enumeration
+	 */
+	@RequestMapping(value = "/forgot-password", method = { RequestMethod.GET,
+			RequestMethod.POST })
+	public ModelAndView forgotPassword(
+			@RequestParam(value = "username", required = false) String username,
+			@RequestParam(value = "answer", required = false) String answer,
+			@RequestParam(value = "password", required = false) String password,
+			Model model, RedirectAttributes redirectAttrs) {
+
+		/*
+		 * If we need anything, let's just take the user to the registration
+		 * page
+		 */
+		if (username == null || password == null || answer == null) {
+			return new ModelAndView("user/forgot-password", "user", new User());
+		}
+
+		/* Validate the user login */
+		if (userService.doesUserExist(username)
+				&& userService.isAnswerValid(username, answer)) {
+			userService.updatePasswordByUsername(username, password);
+			redirectAttrs.addFlashAttribute("success",
+					"Password successfully updated!");
+			return new ModelAndView("redirect:/login");
+		} else
+			model.addAttribute("error", "Invalid username or answer!");
+		return new ModelAndView("user/forgot-password", "user", new User());
+	}
 }

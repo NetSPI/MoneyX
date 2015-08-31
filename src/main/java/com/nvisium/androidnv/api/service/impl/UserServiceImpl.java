@@ -39,9 +39,10 @@ public class UserServiceImpl implements UserService {
 	 */
 	@Override
 	public void addRegularUser(String username, String password, String email,
-			String firstname, String lastname) {
+			String answer, String firstname, String lastname) {
 		com.nvisium.androidnv.api.model.User user = new com.nvisium.androidnv.api.model.User();
-		user.addAccountInfo(username, password, email, firstname, lastname);
+		user.addAccountInfo(username, password, email, answer, firstname,
+				lastname);
 		accountRepository.save(user);
 	}
 
@@ -104,10 +105,13 @@ public class UserServiceImpl implements UserService {
 	@Override
 	public void credit(Long id, BigDecimal amount) {
 		accountRepository.updateBalance(id, amount);
-		
-		UserDetails currentUser = loadUserByUsername(security.getSecurityContext().getUsername());
-		
-		Authentication authentication = new UsernamePasswordAuthenticationToken(currentUser, currentUser.getPassword(), currentUser.getAuthorities());
+
+		UserDetails currentUser = loadUserByUsername(security
+				.getSecurityContext().getUsername());
+
+		Authentication authentication = new UsernamePasswordAuthenticationToken(
+				currentUser, currentUser.getPassword(),
+				currentUser.getAuthorities());
 		SecurityContextHolder.getContext().setAuthentication(authentication);
 	}
 
@@ -116,10 +120,29 @@ public class UserServiceImpl implements UserService {
 		User u = accountRepository.findById(id);
 		if (u.getBalance().compareTo(amount) == -1) {
 			credit(id, amount.negate());
-			
+
 			return true;
 		}
 		return false;
 	}
 
+	@Override
+	public boolean isAnswerValid(String username, String answer) {
+		if (accountRepository.getAnswerByUsername(username).equals(answer))
+			return true;
+		else
+			return false;
+	}
+
+	@Override
+	@Transactional
+	public void updatePasswordByUsername(String username, String password) {
+		accountRepository.updatePasswordByUsername(username, password);
+	}
+
+	@Override
+	public void updateAnswerById(String answer) {
+		accountRepository.updateAnswerById(answer, security.getCurrentUserId());
+		
+	}
 }

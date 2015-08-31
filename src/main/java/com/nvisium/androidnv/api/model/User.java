@@ -42,6 +42,9 @@ public class User implements Serializable {
 	@Column(name = "email")
 	private String email;
 
+	@Column(name = "answer")
+	private String answer;
+
 	@Column(name = "firstname")
 	private String firstname;
 
@@ -65,7 +68,7 @@ public class User implements Serializable {
 
 	@Column(name = "credit_card")
 	private Long creditCard;
-	
+
 	@Column(name = "balance")
 	private BigDecimal balance;
 
@@ -131,7 +134,7 @@ public class User implements Serializable {
 	public void setCreditCard(Long creditCard) {
 		this.creditCard = creditCard;
 	}
-	
+
 	public BigDecimal getBalance() {
 		return balance;
 	}
@@ -146,6 +149,14 @@ public class User implements Serializable {
 
 	public void setEmail(String email) {
 		this.email = email;
+	}
+
+	public String getAnswer() {
+		return answer;
+	}
+
+	public void setAnswer(String answer) {
+		this.answer = answer;
 	}
 
 	public boolean isAccountNonLocked() {
@@ -164,10 +175,11 @@ public class User implements Serializable {
 		this.roles = roles;
 	}
 
-	public void addAccountInfo(String username, String password, String email,
-			String firstname, String lastname) {
+	public void addAccountInfo(String username, String password, String answer,
+			String email, String firstname, String lastname) {
 		this.setUsername(username);
 		this.setPassword(password);
+		this.setAnswer(answer);
 		this.setEmail(email);
 		this.setFirstname(firstname);
 		this.setLastname(lastname);

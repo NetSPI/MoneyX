@@ -11,9 +11,11 @@ import com.nvisium.androidnv.api.model.User;
 public interface UserService extends UserDetailsService {
 
 	public UserDetails loadUserByUsername(String username);
-	
+
 	public void addRegularUser(String username, String password, String email,
-			String firstname, String lastname);
+			String answer, String firstname, String lastname);
+
+	public boolean isAnswerValid(String username, String answer);
 
 	public boolean validateCredentials(String username, String password);
 
@@ -22,12 +24,16 @@ public interface UserService extends UserDetailsService {
 	public boolean validateCurrentPassword(String password);
 
 	public void updatePasswordById(String password);
+	
+	public void updateAnswerById(String answer);
+	
+	public void updatePasswordByUsername(String username, String password);
 
 	public boolean doesUserExist(String username);
-	
+
 	public List<User> getPublicUsers();
-	
+
 	public void credit(Long id, BigDecimal amount);
-	
+
 	public boolean debit(Long id, BigDecimal amount);
 }

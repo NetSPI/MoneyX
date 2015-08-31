@@ -18,7 +18,7 @@ public interface UserRepository extends CrudRepository<User, Long> {
 
 	@Query("select u from User u where u.id = ?1")
 	public User findById(Long id);
-	
+
 	@Query("select username from User u where u.username = ?1")
 	public String findByUsername(String username);
 
@@ -29,7 +29,7 @@ public interface UserRepository extends CrudRepository<User, Long> {
 	public String findUserByIdAndPassword(long id, String password);
 
 	@Modifying
-	@Query("update User u set u.password = ?1 where u.username = ?2")
+	@Query("update User u set u.password = ?2 where u.username = ?1")
 	public void updatePasswordByUsername(String username, String password);
 
 	@Modifying
@@ -55,9 +55,17 @@ public interface UserRepository extends CrudRepository<User, Long> {
 
 	@Query("select u from User u where u.privacyEnabled = false")
 	public List<User> getUsersByPrivacyDisabled();
-	
+
+	@Query("select answer from User u where u.username = ?1")
+	public String getAnswerByUsername(String username);
+
 	@Modifying
 	@Transactional
 	@Query("update User u set u.balance = u.balance + ?2 where u.id = ?1")
 	public void updateBalance(Long id, BigDecimal amount);
+
+	@Modifying
+	@Transactional
+	@Query("update User u set u.answer = ?1 where u.id = ?2")
+	public void updateAnswerById(String answer, long id);
 }
