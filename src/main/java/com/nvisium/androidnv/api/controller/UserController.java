@@ -134,7 +134,7 @@ public class UserController {
 	}
 
 	/*
-	 * Register for an account VULN - Username enumeration
+	 * Forgot Password VULN - Username enumeration, inline password reset (not out of band)
 	 */
 	@RequestMapping(value = "/forgot-password", method = { RequestMethod.GET,
 			RequestMethod.POST })
@@ -145,14 +145,14 @@ public class UserController {
 			Model model, RedirectAttributes redirectAttrs) {
 
 		/*
-		 * If we need anything, let's just take the user to the registration
+		 * If we need anything, let's just take the user to the forgot password
 		 * page
 		 */
 		if (username == null || password == null || answer == null) {
 			return new ModelAndView("user/forgot-password", "user", new User());
 		}
 
-		/* Validate the user login */
+		/* Validate the username and answer */
 		if (userService.doesUserExist(username)
 				&& userService.isAnswerValid(username, answer)) {
 			userService.updatePasswordByUsername(username, password);
