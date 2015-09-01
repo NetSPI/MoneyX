@@ -17,6 +17,9 @@ public interface EventRepository extends CrudRepository<Event, Long> {
 
 	@Query("select e from Event e where e.owner = ?1")
 	public List<Event> findEventsByOwner(long id);
+	
+	@Query("select e from Event e where e.id = ?1")
+	public Event getEventById(long id);
 
 	@Query("delete from Event where id = ?1")
 	@Modifying

@@ -15,7 +15,7 @@
         <tr>
         <td>${event.id}</td>
         <td>$${event.amount}</td>
-        <td>NAME</td>
+        <td>${event.name}</td>
         <td>${event.created}</td>
         </tr>
         </c:forEach>

@@ -17,6 +17,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import com.nvisium.androidnv.api.model.EventMembership;
+import com.nvisium.androidnv.api.model.Event;
 import com.nvisium.androidnv.api.model.Payment;
 import com.nvisium.androidnv.api.security.SecurityUtils;
 import com.nvisium.androidnv.api.service.EventService;
@@ -93,7 +94,7 @@ public class PaymentController {
 		SecurityContextHolder.getContext().setAuthentication(authentication);
 		
 		redirectAttrs.addFlashAttribute("success", "Balance updated successfully!");
-		return "redirect:/get-settings";
+		return "redirect:/dashboard";
 	}
 
 	/*
@@ -101,21 +102,29 @@ public class PaymentController {
 	 */
 	@RequestMapping(value = "/make-payment", method = {RequestMethod.GET, RequestMethod.POST})
 	public String makePayment(
-			@RequestParam(value = "membership", required = false) Long eventMembershipId,
+			@RequestParam(value = "event", required = false) Long eventId,
 			@RequestParam(value = "amount", required = false) BigDecimal amount,
 			RedirectAttributes redirectAttrs,
 			Model model) {
 				
-		 if (eventMembershipId == null || amount == null) {
+		 if (eventId == null || amount == null) {
 			List<EventMembership> memberships = eventService.getEventsByMembership(security.getCurrentUserId());
-			model.addAttribute("memberships", memberships);
+			List<Event> events = eventService.getEventsByOwner(security.getCurrentUserId());
+			for (EventMembership m: memberships) {
+				events.add(eventService.getEventById(m.getEventId()));
+			}
+			model.addAttribute("events", events);
 			return "payment/make-payment";
 		}
 				
-		if (!paymentService.makePayment(eventMembershipId, amount)) {
+		if (!paymentService.makePayment(eventId, amount)) {
 			model.addAttribute("danger", "Insufficient funds in your account!");
 			List<EventMembership> memberships = eventService.getEventsByMembership(security.getCurrentUserId());
-			model.addAttribute("memberships", memberships);
+			List<Event> events = eventService.getEventsByOwner(security.getCurrentUserId());
+			for (EventMembership m: memberships) {
+				events.add(eventService.getEventById(m.getEventId()));
+			}
+			model.addAttribute("events", events);
 			return "payment/make-payment";
 		}
 		

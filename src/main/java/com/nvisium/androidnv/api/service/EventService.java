@@ -31,4 +31,6 @@ public interface EventService {
 	
 	public List<User> getUsersbyEventMembership(Long eventId);
 	
+	public Event getEventById(Long id);
+	
 }

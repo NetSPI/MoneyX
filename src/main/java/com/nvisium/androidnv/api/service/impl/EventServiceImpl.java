@@ -93,6 +93,11 @@ public class EventServiceImpl implements EventService {
 	public void deleteEvent(Long id) {
 		eventRepository.deleteEventById(id);
 	}
+	
+	@Override
+	public Event getEventById(Long id) {
+		return eventRepository.getEventById(id);
+	}
 
 	@Override
 	public List<EventMembership> getEventsByMembership(Long userId) {

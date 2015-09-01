@@ -55,12 +55,17 @@ public class EventController {
 	public String listEventMembership(
 			@PathVariable("user") Long user,
 			Model model) {
-		java.util.List<EventMembership> events = eventService.getEventsByMembership(user);
-		if (events.size() == 0) {
+		java.util.List<EventMembership> events_m = eventService.getEventsByMembership(user);
+		java.util.List<Event> events = new java.util.ArrayList<Event>();
+		if (events_m.size() == 0) {
 			model.addAttribute("info", "User is not part of any events!");
+		} else {
+			for ( EventMembership e : events_m) {
+				events.add(eventService.getEventById(e.getEventId()));
+			}
+			model.addAttribute("events", events);
 		}
-		
-		model.addAttribute("events", events);
+	
 		return "event/list-member";
 	}
 
