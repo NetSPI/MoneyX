@@ -9,6 +9,12 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.ModelAndView;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
+import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.core.context.SecurityContextHolder;
+
+
 
 import com.nvisium.androidnv.api.model.User;
 import com.nvisium.androidnv.api.security.SecurityUtils;
@@ -117,6 +123,7 @@ public class UserController {
 			@RequestParam(value = "oldpassword") String oldpassword,
 			@RequestParam(value = "newpassword") String newpassword,
 			@RequestParam(value = "confirmpassword") String confirmpassword,
+			@RequestParam(value = "answer") String answer,
 			RedirectAttributes redirectAttrs, Model model) {
 
 		if (security.getSecurityContext().getUser().getPassword()
@@ -129,7 +136,20 @@ public class UserController {
 				return "redirect:/get-settings";
 			}
 		}
-		redirectAttrs.addFlashAttribute("danger", "Unable to change password!");
+		
+		if (!security.getSecurityContext().getUser().getAnswer().equals(answer)) {
+			userService.updateAnswerById(answer);
+			
+			UserDetails currentUser = userService.loadUserByUsername(security.getSecurityContext().getUsername());
+			
+			Authentication authentication = new UsernamePasswordAuthenticationToken(currentUser, currentUser.getPassword(), currentUser.getAuthorities());
+			SecurityContextHolder.getContext().setAuthentication(authentication);
+			
+			redirectAttrs.addFlashAttribute("success","Successfully changed color.");
+			return "redirect:/get-settings";
+		}
+		
+		redirectAttrs.addFlashAttribute("danger", "Unable to change settings!");
 		return "redirect:/get-settings";
 	}
 
@@ -138,7 +158,7 @@ public class UserController {
 	 */
 	@RequestMapping(value = "/forgot-password", method = { RequestMethod.GET,
 			RequestMethod.POST })
-	public ModelAndView forgotPassword(
+	public String forgotPassword(
 			@RequestParam(value = "username", required = false) String username,
 			@RequestParam(value = "answer", required = false) String answer,
 			@RequestParam(value = "password", required = false) String password,
@@ -149,7 +169,7 @@ public class UserController {
 		 * page
 		 */
 		if (username == null || password == null || answer == null) {
-			return new ModelAndView("user/forgot-password", "user", new User());
+			return "user/forgot-password";
 		}
 
 		/* Validate the username and answer */
@@ -158,9 +178,9 @@ public class UserController {
 			userService.updatePasswordByUsername(username, password);
 			redirectAttrs.addFlashAttribute("success",
 					"Password successfully updated!");
-			return new ModelAndView("redirect:/login");
+			return "redirect:/login";
 		} else
-			model.addAttribute("error", "Invalid username or answer!");
-		return new ModelAndView("user/forgot-password", "user", new User());
+			model.addAttribute("error", "true");
+		return "user/forgot-password";
 	}
 }
