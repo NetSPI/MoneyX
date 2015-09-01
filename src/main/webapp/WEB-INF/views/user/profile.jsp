@@ -1,0 +1,61 @@
+<%@ page contentType="text/html" pageEncoding="UTF-8"%>
+<%@ taglib prefix="form" uri="http://www.springframework.org/tags/form"%>
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
+<%@ taglib prefix="t" tagdir="/WEB-INF/tags"%>
+
+<t:wrapper>
+	<div class="container" role="main">
+
+    	<c:if test="${not empty danger}">
+    	<div class="alert alert-danger alert-dismissible" role="danger">
+        	${danger}
+    	</div>
+    	</c:if>
+    	<c:if test="${not empty success}">
+    	<div class="alert alert-success alert-dismissible" role="success">
+        	${success}
+    	</div>
+    	</c:if>
+    	<c:if test="${not empty info}">
+    	<div class="alert alert-info alert-dismissible" role="info">
+        	${info}
+    	</div>
+    	</c:if>
+    </div> <!-- /container -->
+
+        <div class="col-md-6">
+            <h2 class="form-signin-heading">Edit Profile</h2>
+            <form:form class="form-signin form-horizontal" action="/profile/${user.id}" method="post">
+                <div class="form-group">
+                    <label for="username" class="col-md-4 control-label">Username</label>
+                    <div class="col-md-8">
+                        <input class="form-control" value="${user.username}" type="text" name="username" readonly="readonly">
+                    </div>
+                </div>
+                
+                <div class="form-group">
+                    <label for="email" class="col-md-4 control-label">First Name</label>
+                    <div class="col-md-8">
+                        <input class="form-control" value="${user.firstname}" type="text" name="firstname">
+                    </div>
+                </div>
+                
+                <div class="form-group">
+                    <label for="email" class="col-md-4 control-label">Last Name</label>
+                    <div class="col-md-8">
+                        <input class="form-control" value="${user.lastname}" type="text" name="lastname">
+                    </div>
+                </div>
+                
+                <div class="form-group">
+                    <label for="email" class="col-md-4 control-label">Email</label>
+                    <div class="col-md-8">
+                        <input class="form-control" value="${user.email}" type="text" name="email">
+                    </div>
+                </div>
+                
+                <button class="btn btn-primary btn-block" type="submit">Update</button>
+            </form:form>
+        </div>
+
+</t:wrapper>

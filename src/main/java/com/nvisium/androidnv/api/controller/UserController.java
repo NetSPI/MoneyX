@@ -76,6 +76,14 @@ public class UserController {
 			model.addAttribute("error", "Username already taken!");
 		return new ModelAndView("user/register", "user", new User());
 	}
+	
+	@RequestMapping(value = "/profile/{id}", method = {RequestMethod.GET, RequestMethod.POST})
+	public String updatePassword(@PathVariable Long id, Model model, RedirectAttributes redirectAttrs) {
+		
+		model.addAttribute("user", security.getSecurityContext().getUser());
+		return "user/profile";
+		
+	}
 
 	/*
 	 * Update the account password VULN - CSRF
