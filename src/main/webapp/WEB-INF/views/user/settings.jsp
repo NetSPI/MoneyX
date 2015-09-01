@@ -4,14 +4,8 @@
 <%@ taglib prefix="t" tagdir="/WEB-INF/tags" %>
 
 <t:wrapper>
-    <div class="row">
         <div class="col-md-6">
-            <h2>${user.firstname} ${user.lastname}</h2>
-            <p><i>${user.username}</i></p>
-            <p>Your Friends</p>
-        </div>
-        <div class="col-md-6">
-            <h2 class="form-signin-heading">Change your password</h2>
+            <h2 class="form-signin-heading">${user.firstname}'s Settings</h2>
             <form:form class="form-signin form-horizontal" action="/update-settings" method="get">
                 <div class="form-group">
                     <label for="oldpassword" class="col-md-4 control-label">Old</label>
