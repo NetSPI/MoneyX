@@ -96,6 +96,18 @@ public class UserServiceImpl implements UserService {
 		}
 		return new ArrayList<GrantedAuthority>(setAuths);
 	}
+	
+	@Override
+	@Transactional
+	public User loadUserById(Long id) {
+		return accountRepository.findById(id);
+	}
+	
+	@Override
+	@Transactional
+	public void updateUser(String username, String firstname, String lastname, String email) {
+		accountRepository.updateUserProfile(username,firstname,lastname,email);
+	}
 
 	@Override
 	public List<User> getPublicUsers() {

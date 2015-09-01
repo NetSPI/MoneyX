@@ -4,24 +4,6 @@
 <%@ taglib prefix="t" tagdir="/WEB-INF/tags"%>
 
 <t:wrapper>
-	<div class="container" role="main">
-
-    	<c:if test="${not empty danger}">
-    	<div class="alert alert-danger alert-dismissible" role="danger">
-        	${danger}
-    	</div>
-    	</c:if>
-    	<c:if test="${not empty success}">
-    	<div class="alert alert-success alert-dismissible" role="success">
-        	${success}
-    	</div>
-    	</c:if>
-    	<c:if test="${not empty info}">
-    	<div class="alert alert-info alert-dismissible" role="info">
-        	${info}
-    	</div>
-    	</c:if>
-    </div> <!-- /container -->
 
         <div class="col-md-6">
             <h2 class="form-signin-heading">Edit Profile</h2>

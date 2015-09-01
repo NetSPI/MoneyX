@@ -44,8 +44,8 @@ public interface UserRepository extends CrudRepository<User, Long> {
 	// TODO: add the right settings to be persisted, or just persist the entire
 	// user object or something else lazy
 	@Modifying
-	@Query("update User u set u.firstname = '' where u.username = ?1")
-	public void updateSettings(String username);
+	@Query("update User u set u.firstname = ?2, u.lastname = ?3, u.email = ?4 where u.username = ?1")
+	public void updateUserProfile(String username, String firstname, String lastname, String email);
 
 	@Query("select u from User u where u.username = ?1")
 	public User getUserModelByUsername(String username);

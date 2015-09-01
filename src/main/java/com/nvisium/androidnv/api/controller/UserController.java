@@ -77,12 +77,35 @@ public class UserController {
 		return new ModelAndView("user/register", "user", new User());
 	}
 	
-	@RequestMapping(value = "/profile/{id}", method = {RequestMethod.GET, RequestMethod.POST})
-	public String updatePassword(@PathVariable Long id, Model model, RedirectAttributes redirectAttrs) {
+	// IDOR: This is vulnerable
+	// TODO: Modify this lookup to make in vulnerable to SQL Injection.
+	
+	@RequestMapping(value = "/profile/{id}", method = RequestMethod.GET)
+	public String getProfile(@PathVariable Long id, Model model, RedirectAttributes redirectAttrs) {
 		
-		model.addAttribute("user", security.getSecurityContext().getUser());
+		model.addAttribute("user", userService.loadUserById(id));
 		return "user/profile";
+	}
+	
+	@RequestMapping(value = "/profile/{id}", method = RequestMethod.POST)
+	public String updateProfile(@PathVariable Long id, 
+			@RequestParam(value = "username", required = false) String username,
+			@RequestParam(value = "email", required = false) String email,
+			@RequestParam(value = "firstname", required = false) String firstname,
+			@RequestParam(value = "lastname", required = false) String lastname,
+			Model model, RedirectAttributes redirectAttrs) {
 		
+		if (username == null || firstname == null || lastname == null || email == null) {
+			model.addAttribute("danger","All attributes are required");
+			model.addAttribute("user", userService.loadUserById(id));
+			return "user/profile";
+		} else {
+		
+			userService.updateUser(username, firstname, lastname, email);
+			model.addAttribute("success","User Profile updated");
+			model.addAttribute("user", userService.loadUserById(id));
+			return "user/profile";
+		}
 	}
 
 	/*

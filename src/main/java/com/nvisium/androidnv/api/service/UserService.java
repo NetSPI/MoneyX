@@ -11,6 +11,8 @@ import com.nvisium.androidnv.api.model.User;
 public interface UserService extends UserDetailsService {
 
 	public UserDetails loadUserByUsername(String username);
+	
+	public User loadUserById(Long id);
 
 	public void addRegularUser(String username, String password, String email,
 			String answer, String firstname, String lastname);
@@ -28,6 +30,8 @@ public interface UserService extends UserDetailsService {
 	public void updateAnswerById(String answer);
 	
 	public void updatePasswordByUsername(String username, String password);
+	
+	public void updateUser(String username, String firstname, String lastname, String email);
 
 	public boolean doesUserExist(String username);
 
