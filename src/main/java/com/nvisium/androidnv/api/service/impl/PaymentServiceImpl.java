@@ -52,8 +52,7 @@ public class PaymentServiceImpl implements PaymentService {
 			return false;
 		}
 		
-		EventMembership eventMembership = eventMembershipRepository.findEventMembershipByEventIdAndUserId(
-				event.getId(), security.getCurrentUserId());
+		EventMembership eventMembership = eventMembershipRepository.findEventMembershipByEventIdAndUserId(event.getId(), security.getCurrentUserId());
 		if (eventMembership == null) {
 			return false;
 		}

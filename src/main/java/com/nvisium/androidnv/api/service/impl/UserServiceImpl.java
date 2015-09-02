@@ -109,7 +109,6 @@ public class UserServiceImpl implements UserService {
 		
 		BigDecimal newAmount = loadUserById(id).getBalance().add(amount);
 		accountRepository.updateBalance(id, newAmount);
-		//accountRepository.save(loadUserById(id));
 
 		UserDetails currentUser = loadUserByUsername(security
 				.getSecurityContext().getUsername());

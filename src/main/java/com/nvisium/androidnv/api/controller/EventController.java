@@ -61,16 +61,20 @@ public class EventController {
 		java.util.List<EventMembership> events_m = eventService.getEventsByMembership(user);
 		java.util.List<Event> events = new java.util.ArrayList<Event>();
 		Map<Long, User> users = new HashMap<Long, User>();
+		Map<Long, EventMembership> memberships = new HashMap<Long, EventMembership>();
 		
 		if (events_m.size() == 0) {
 			model.addAttribute("info", "User is not part of any events!");
 		} else {
-			for ( EventMembership e : events_m) {
-				events.add(eventService.getEventById(e.getEventId()));
-				users.put(e.getEventId(), userService.loadUserById(e.getUser()));
+			for ( EventMembership m : events_m) {
+				Event e = eventService.getEventById(m.getEventId());
+				events.add(e);
+				users.put(m.getEventId(), userService.loadUserById(e.getOwner()));
+				memberships.put(m.getEventId(), m);
 			}
 			model.addAttribute("events", events);
 			model.addAttribute("users", users);
+			model.addAttribute("memberships", memberships);
 		}
 	
 		return "event/list-member";
@@ -99,7 +103,7 @@ public class EventController {
 		
 		if (users != null && users.size() > 0) {
 			for (Long tempUserId: users) {
-				eventService.addEventMembership(eventId, tempUserId, new BigDecimal(10));
+				eventService.addEventMembership(eventId, tempUserId, amount.divide(new BigDecimal(users.size())));
 			}
 		}
 				

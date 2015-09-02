@@ -9,7 +9,8 @@
         <tr>
             <th>#</th>
             <th>Owner</th>
-			<th>Total Amount</th>
+            <th>My Share</th>
+			<th>Total</th>
             <th>Event</th>
             <th>Date</th>
             <th>Pay Now</th>
@@ -18,6 +19,7 @@
         <tr>
         <td>${event.id}</td>
         <td>${users.get(event.id).firstname} ${users.get(event.id).lastname}</td>
+        <td>$${memberships.get(event.id).amount}
         <td>$${event.amount}</td>
         <td>${event.name}</td>
         <td>${event.created}</td>
