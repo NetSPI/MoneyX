@@ -37,7 +37,6 @@ public class UserServiceImpl implements UserService {
 	/*
 	 * Inserts a new user
 	 */
-	@Override
 	public void addRegularUser(String username, String password, String email,
 			String answer, String firstname, String lastname) {
 		com.nvisium.androidnv.api.model.User user = new com.nvisium.androidnv.api.model.User();
@@ -46,26 +45,22 @@ public class UserServiceImpl implements UserService {
 		accountRepository.save(user);
 	}
 
-	@Override
 	public boolean validateCredentials(String username, String password) {
 		return (!(accountRepository.findByUsernameAndPassword(username,
 				password) == null));
 	}
 
-	@Override
 	@Transactional
 	public void logout() {
 		// TODO: purge from redis...for now, who cares, tokens live forever!!
 		// VULN
 	}
 
-	@Override
 	public boolean validateCurrentPassword(String password) {
 		return (accountRepository.findUserByIdAndPassword(
 				security.getCurrentUserId(), password) != null);
 	}
 
-	@Override
 	@Transactional
 	public void updatePasswordById(String password) {
 		accountRepository.updatePasswordById(password,
@@ -76,7 +71,6 @@ public class UserServiceImpl implements UserService {
 		return accountRepository.findByUsername(username) != null;
 	}
 
-	@Override
 	@Transactional(readOnly = true)
 	public UserDetails loadUserByUsername(String username) {
 
@@ -97,26 +91,25 @@ public class UserServiceImpl implements UserService {
 		return new ArrayList<GrantedAuthority>(setAuths);
 	}
 	
-	@Override
 	@Transactional
 	public User loadUserById(Long id) {
 		return accountRepository.findById(id);
 	}
 	
-	@Override
 	@Transactional
 	public void updateUser(String username, String firstname, String lastname, String email) {
 		accountRepository.updateUserProfile(username,firstname,lastname,email);
 	}
 
-	@Override
 	public List<User> getPublicUsers() {
 		return accountRepository.getUsersByPrivacyDisabled();
 	}
 
-	@Override
 	public void credit(Long id, BigDecimal amount) {
-		accountRepository.updateBalance(id, amount);
+		
+		BigDecimal newAmount = loadUserById(id).getBalance().add(amount);
+		accountRepository.updateBalance(id, newAmount);
+		//accountRepository.save(loadUserById(id));
 
 		UserDetails currentUser = loadUserByUsername(security
 				.getSecurityContext().getUsername());
@@ -127,7 +120,6 @@ public class UserServiceImpl implements UserService {
 		SecurityContextHolder.getContext().setAuthentication(authentication);
 	}
 
-	@Override
 	public boolean debit(Long id, BigDecimal amount) {
 		User u = accountRepository.findById(id);
 		if (u.getBalance().compareTo(amount) == -1) {
@@ -138,7 +130,6 @@ public class UserServiceImpl implements UserService {
 		return false;
 	}
 
-	@Override
 	public boolean isAnswerValid(String username, String answer) {
 		if (accountRepository.getAnswerByUsername(username).equals(answer))
 			return true;
@@ -146,13 +137,11 @@ public class UserServiceImpl implements UserService {
 			return false;
 	}
 
-	@Override
 	@Transactional
 	public void updatePasswordByUsername(String username, String password) {
 		accountRepository.updatePasswordByUsername(username, password);
 	}
 
-	@Override
 	public void updateAnswerById(String answer) {
 		accountRepository.updateAnswerById(answer, security.getCurrentUserId());
 		

@@ -38,7 +38,6 @@ public class EventServiceImpl implements EventService {
 	/*
 	 * Inserts a new event
 	 */
-	@Override
 	public Long addEvent(String name, BigDecimal amount) {
 		Event event = new Event();
 		event.populateEvent(security.getCurrentUserId(), name, amount,
@@ -50,7 +49,6 @@ public class EventServiceImpl implements EventService {
 	/*
 	 * Updates an event
 	 */
-	@Override
 	@Transactional
 	public void updateEvent(Long owner, String name, BigDecimal amount, Boolean hidden, Long id) {
 		eventRepository.updateEventById(owner, name, amount, hidden, id);
@@ -59,7 +57,6 @@ public class EventServiceImpl implements EventService {
 	/*
 	 * Inserts a new event membership
 	 */
-	@Override
 	public void addEventMembership(Long event, Long user, BigDecimal amount) {
 		EventMembership eventMembership = new EventMembership();
 		eventMembership.populateEventMembership(event, user, amount, new Date(
@@ -67,44 +64,36 @@ public class EventServiceImpl implements EventService {
 		eventMembershipRepository.save(eventMembership);
 	}
 
-	@Override
 	@Transactional
 	public void deleteEventMembership(Long eventId, Long userId) {
 		eventMembershipRepository.deleteEventByIdAndUser(eventId, userId);
 	}
 	
-	@Override
 	public boolean isUserMember(Long eventId, Long userId) {
 		return eventMembershipRepository.isUserMember(eventId, userId);
 	}
 
-	@Override
 	public List<Event> getEventsByOwner(Long user) {
 		return eventRepository.findEventsByOwner(user);
 	}
 	
-	@Override
 	public List<Event> getPublicEvents() {
 		return eventRepository.findByHiddenFalse();
 	}
 
-	@Override
 	@Transactional
 	public void deleteEvent(Long id) {
 		eventRepository.deleteEventById(id);
 	}
 	
-	@Override
 	public Event getEventById(Long id) {
 		return eventRepository.getEventById(id);
 	}
 
-	@Override
 	public List<EventMembership> getEventsByMembership(Long userId) {
 		return eventMembershipRepository.findEventMembershipByUserId(userId);
 	}
 	
-	@Override
 	public List<User> getUsersbyEventMembership(Long eventId) {
 		List<EventMembership> eventMemberships = eventMembershipRepository.findEventMembershipsByEventId(eventId);
 		List<User> users = new LinkedList<User>();
@@ -115,7 +104,6 @@ public class EventServiceImpl implements EventService {
 		
 	}
 
-	@Override
 	public List<EventMembership> getMembershipsByEvent(Long eventId) {
 		return eventMembershipRepository.findEventMembershipsByEventId(eventId);
 	}
