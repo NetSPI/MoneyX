@@ -23,6 +23,7 @@ public class Event {
 	@Version
 	private Long version;
 
+	// TODO: Actually associate this with a user, not just an id that we have to reference...see Payment Model.
 	@Column(name = "owner")
 	private Long owner;
 

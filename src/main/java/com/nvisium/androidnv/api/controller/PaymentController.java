@@ -21,6 +21,7 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 import com.nvisium.androidnv.api.model.EventMembership;
 import com.nvisium.androidnv.api.model.Event;
 import com.nvisium.androidnv.api.model.Payment;
+import com.nvisium.androidnv.api.model.User;
 import com.nvisium.androidnv.api.security.SecurityUtils;
 import com.nvisium.androidnv.api.service.EventService;
 import com.nvisium.androidnv.api.service.PaymentService;
@@ -116,9 +117,12 @@ public class PaymentController {
 		 if (eventId == null || amount == null) {
 			List<EventMembership> memberships = eventService.getEventsByMembership(security.getCurrentUserId());
 			Map<EventMembership, Event> events = new HashMap<EventMembership, Event>();
+			Map<Event, User> users = new HashMap<Event, User>();
 			for (EventMembership m: memberships) {
 				events.put(m, eventService.getEventById(m.getEventId()));
+				users.put(eventService.getEventById(m.getEventId()), userService.loadUserById(m.getUser()));
 			}
+			model.addAttribute("users", users);
 			model.addAttribute("events", events);
 			return "payment/make-payment";
 		}
@@ -127,10 +131,13 @@ public class PaymentController {
 			model.addAttribute("danger", "Insufficient funds in your account!");
 			List<EventMembership> memberships = eventService.getEventsByMembership(security.getCurrentUserId());
 			Map<EventMembership, Event> events = new HashMap<EventMembership, Event>();
+			Map<Event, User> users = new HashMap<Event, User>();
 			for (EventMembership m: memberships) {
 				events.put(m, eventService.getEventById(m.getEventId()));
+				users.put(eventService.getEventById(m.getEventId()), userService.loadUserById(m.getUser()));
 			}
 			model.addAttribute("events", events);
+			model.addAttribute("users", users);
 			return "payment/make-payment";
 		}
 
