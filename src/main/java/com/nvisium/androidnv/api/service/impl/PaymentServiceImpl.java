@@ -49,6 +49,9 @@ public class PaymentServiceImpl implements PaymentService {
 		Payment payment = new Payment();
 		
 		EventMembership eventMembership = eventMembershipRepository.findOne(eventMembershipId);
+		if (eventMembership == null) {
+			return false;
+		}
 		Long eventId = eventMembership.getEventId();
 		
 		if (amount.compareTo(userRepository.findById(security.getCurrentUserId()).getBalance()) == 1) {
@@ -60,11 +63,15 @@ public class PaymentServiceImpl implements PaymentService {
 		paymentRepository.save(payment);
 		
 		BigDecimal paidAmount = eventMembership.getAmount().min(amount);
-		
+				
 		userService.debit(security.getCurrentUserId(), paidAmount);
-		
-		if (eventMembership.getAmount().compareTo(paidAmount) != 1) {
-			eventMembershipRepository.delete(eventMembership);
+				
+		System.out.println("FIRST: " + eventMembership.getAmount());
+		System.out.println("SECOND: " + paidAmount);
+		System.out.println("TEST :" + eventMembership.getAmount().compareTo(paidAmount));
+		if (eventMembership.getAmount().equals(paidAmount)) {
+			System.out.println("we deleting it" + eventId + " " + security.getCurrentUserId());
+			eventMembershipRepository.deleteEventByIdAndUser(eventId, security.getCurrentUserId());
 			/* Is the greater event done too? */
 			if (eventMembershipRepository.findEventMembershipsByEventId(eventId).size() == 0) {
 				Event event = eventRepository.findOne(eventId);
@@ -72,6 +79,7 @@ public class PaymentServiceImpl implements PaymentService {
 				eventRepository.save(event);
 			}
 		} else {
+			System.out.println("reducing the amount");
 			eventMembershipRepository.makePayment(eventId, security.getCurrentUserId(), paidAmount);
 		}
 		

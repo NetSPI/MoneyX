@@ -1,7 +1,10 @@
 package com.nvisium.androidnv.api.controller;
 
 import java.math.BigDecimal;
+import java.util.HashMap;
+import java.util.LinkedList;
 import java.util.List;
+import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
@@ -109,9 +112,9 @@ public class PaymentController {
 				
 		 if (eventId == null || amount == null) {
 			List<EventMembership> memberships = eventService.getEventsByMembership(security.getCurrentUserId());
-			List<Event> events = eventService.getEventsByOwner(security.getCurrentUserId());
+			Map<EventMembership, Event> events = new HashMap<EventMembership, Event>();
 			for (EventMembership m: memberships) {
-				events.add(eventService.getEventById(m.getEventId()));
+				events.put(m, eventService.getEventById(m.getEventId()));
 			}
 			model.addAttribute("events", events);
 			return "payment/make-payment";

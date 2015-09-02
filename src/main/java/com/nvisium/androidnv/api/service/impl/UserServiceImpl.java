@@ -130,7 +130,7 @@ public class UserServiceImpl implements UserService {
 	@Override
 	public boolean debit(Long id, BigDecimal amount) {
 		User u = accountRepository.findById(id);
-		if (u.getBalance().compareTo(amount) == -1) {
+		if (u.getBalance().compareTo(amount) != -1) {
 			credit(id, amount.negate());
 
 			return true;

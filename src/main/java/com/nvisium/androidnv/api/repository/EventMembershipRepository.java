@@ -3,12 +3,13 @@ package com.nvisium.androidnv.api.repository;
 import java.math.BigDecimal;
 import java.util.List;
 
+import javax.transaction.Transactional;
+
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.CrudRepository;
 import org.springframework.stereotype.Repository;
-import org.springframework.transaction.annotation.Transactional;
 
 import com.nvisium.androidnv.api.model.EventMembership;
 
@@ -36,6 +37,6 @@ public interface EventMembershipRepository extends
 	
 	@Modifying
 	@Transactional
-	@Query("Update EventMembership e set amount = amount - ?3 where eventId = ?1 and user = ?2")
+	@Query("Update EventMembership e set e.amount = e.amount - ?3 where e.eventId = ?1 and e.user = ?2")
 	public void makePayment(Long eventId, Long userId, BigDecimal amount);
 }
