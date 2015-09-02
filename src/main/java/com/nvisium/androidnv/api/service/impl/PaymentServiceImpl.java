@@ -8,6 +8,7 @@ import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Service;
 
 import com.nvisium.androidnv.api.model.Event;
+import com.nvisium.androidnv.api.model.User;
 import com.nvisium.androidnv.api.model.EventMembership;
 import com.nvisium.androidnv.api.model.Payment;
 import com.nvisium.androidnv.api.repository.EventMembershipRepository;
@@ -44,11 +45,10 @@ public class PaymentServiceImpl implements PaymentService {
 	@Autowired
 	SecurityUtils security;
 
-	@Override
-	public boolean makePayment(Long eventMembershipId, BigDecimal amount) {
+	public boolean makePayment(Event event, BigDecimal amount) {
 		Payment payment = new Payment();
 		
-		EventMembership eventMembership = eventMembershipRepository.findOne(eventMembershipId);
+		EventMembership eventMembership = eventMembershipRepository.findOne(event.getId());
 		if (eventMembership == null) {
 			return false;
 		}
@@ -57,26 +57,24 @@ public class PaymentServiceImpl implements PaymentService {
 		if (amount.compareTo(userRepository.findById(security.getCurrentUserId()).getBalance()) == 1) {
 			return false;
 		}
+		User sender = userRepository.findById(security.getCurrentUserId());
+		User receiver = userRepository.findById(eventRepository.getEventOwnerIdByEventId(event.getId()));
 
-		payment.populatePayment(eventId, amount, security.getCurrentUserId(),
-				eventRepository.getEventOwnerIdByEventId(eventId));
+		payment.populatePayment(event, amount, sender, receiver);
 		paymentRepository.save(payment);
 		
 		BigDecimal paidAmount = eventMembership.getAmount().min(amount);
-				
-		userService.debit(security.getCurrentUserId(), paidAmount);
-				
-		System.out.println("FIRST: " + eventMembership.getAmount());
-		System.out.println("SECOND: " + paidAmount);
-		System.out.println("TEST :" + eventMembership.getAmount().compareTo(paidAmount));
+		userService.debit(sender.getId(), paidAmount);
+		//userRepository.save(sender);
+		userService.credit(receiver.getId(),paidAmount);
+		
 		if (eventMembership.getAmount().equals(paidAmount)) {
-			System.out.println("we deleting it" + eventId + " " + security.getCurrentUserId());
-			eventMembershipRepository.deleteEventByIdAndUser(eventId, security.getCurrentUserId());
+			eventMembershipRepository.delete(eventMembership);
 			/* Is the greater event done too? */
-			if (eventMembershipRepository.findEventMembershipsByEventId(eventId).size() == 0) {
-				Event event = eventRepository.findOne(eventId);
-				event.setCompleted(true);
-				eventRepository.save(event);
+			if (eventMembershipRepository.findEventMembershipsByEventId(event.getId()).size() == 0) {
+				Event e = eventRepository.findOne(event.getId());
+				e.setCompleted(true);
+				eventRepository.save(e);
 			}
 		} else {
 			System.out.println("reducing the amount");
@@ -86,13 +84,23 @@ public class PaymentServiceImpl implements PaymentService {
 		return true;
 	}
 
-	@Override
-	public List<Payment> getSentPayments(Long user) {
+	public List<Payment> getSentPayments(User user) {
 		return paymentRepository.findPaymentsBySender(user);
 	}
 
-	@Override
-	public List<Payment> getReceivedPayments(Long user) {
+	public List<Payment> getReceivedPayments(User user) {
 		return paymentRepository.findPaymentsByReceiver(user);
+	}
+	
+	public BigDecimal getTotalPayments(Event event) {
+		BigDecimal total = new BigDecimal(0.00);
+		
+		List<Payment> payments = paymentRepository.findPaymentsByEvent(event);
+		
+		for (Payment p: payments) {
+			total = total.add(p.getAmount());
+		}
+		
+		return total;
 	}
 }

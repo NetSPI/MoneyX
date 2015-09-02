@@ -3,20 +3,22 @@
 <%@ taglib prefix="t" tagdir="/WEB-INF/tags" %>
 
 <t:wrapper>
-    <h1>My Sent Payments</h1>
+    <h1>Sent Payments</h1>
     <table class="table">
         <tr>
             <th>ID</th>
+            <th>Amount</th>
             <th>Event</th>
             <th>Receiver</th>
             <th>Timestamp</th>
         </tr>
         <c:forEach var="payment" items="${payments}">
         <tr>
-        <td>${payment.id}</td>
-        <td>${payment.event}</td>
-        <td>${payment.receiver}</td>
-        <td>${payment.timestamp}</td>
+        	<td>${payment.id}</td>
+        	<td>$${payment.amount}<td>
+        	<td>${payment.event.name}</td>
+        	<td>${payment.receiver.firstname} ${payment.receiver.lastname}</td>
+        	<td>${payment.timestamp}</td>
         </tr>
         </c:forEach>
     </table>

@@ -21,6 +21,7 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import com.nvisium.androidnv.api.model.EventMembership;
 import com.nvisium.androidnv.api.model.Event;
+import com.nvisium.androidnv.api.model.User;
 import com.nvisium.androidnv.api.model.Payment;
 import com.nvisium.androidnv.api.security.SecurityUtils;
 import com.nvisium.androidnv.api.service.EventService;
@@ -50,7 +51,7 @@ public class PaymentController {
 	public String listReceivedPayments(
 			@PathVariable Long id,
 			Model model) {
-		List<Payment> payments = paymentService.getReceivedPayments(id);
+		List<Payment> payments = paymentService.getReceivedPayments(userService.loadUserById(id));
 		if (payments.size() == 0) {
 			model.addAttribute("info", "User has not received any payments!");
 		}
@@ -65,11 +66,15 @@ public class PaymentController {
 	public String listSentPayments(
 			@PathVariable Long id,
 			Model model) {
-		List<Payment> payments = paymentService.getSentPayments(id);
+		List<Payment> payments = paymentService.getSentPayments(userService.loadUserById(id));
+		
 		if (payments.size() == 0) {
 			model.addAttribute("info", "User has not sent any payments!");
+		} else {
+			model.addAttribute("payments", payments);
 		}
-		model.addAttribute("payments", payments);
+		
+		
 		return "payment/list-sent";
 	}
 	
@@ -119,18 +124,18 @@ public class PaymentController {
 			model.addAttribute("events", events);
 			return "payment/make-payment";
 		}
-				
-		if (!paymentService.makePayment(eventId, amount)) {
+
+		if (!paymentService.makePayment(eventService.getEventById(eventId), amount)) {
 			model.addAttribute("danger", "Insufficient funds in your account!");
 			List<EventMembership> memberships = eventService.getEventsByMembership(security.getCurrentUserId());
-			List<Event> events = eventService.getEventsByOwner(security.getCurrentUserId());
+			List<Event> events = new java.util.ArrayList<Event>();
 			for (EventMembership m: memberships) {
 				events.add(eventService.getEventById(m.getEventId()));
 			}
 			model.addAttribute("events", events);
 			return "payment/make-payment";
 		}
-		
+
 		UserDetails currentUser = userService.loadUserByUsername(security.getSecurityContext().getUsername());
 		
 		Authentication authentication = new UsernamePasswordAuthenticationToken(currentUser, currentUser.getPassword(), currentUser.getAuthorities());

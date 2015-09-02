@@ -3,15 +3,7 @@ package com.nvisium.androidnv.api.model;
 import java.math.BigDecimal;
 import java.util.Date;
 
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
-import javax.persistence.Table;
-import javax.persistence.Temporal;
-import javax.persistence.TemporalType;
-import javax.persistence.Version;
+import javax.persistence.*;
 
 @Entity
 @Table(name = "payments")
@@ -24,21 +16,24 @@ public class Payment {
 	@Version
 	private Long version;
 
-	@Column(name = "event")
-	private Long event;
+	@ManyToOne(targetEntity=Event.class)
+	@JoinColumn(name = "event")
+	private Event event;
 
 	@Column(name = "amount")
 	private BigDecimal amount;
 
 	@Column(name = "timestamp")
 	@Temporal(TemporalType.TIMESTAMP)
-	private java.util.Date timestamp;
+	private Date timestamp;
 
-	@Column(name = "sender")
-	private Long sender;
+	@ManyToOne(targetEntity=User.class)
+	@JoinColumn(name = "sender")
+	private User sender;
 
-	@Column(name = "receiver")
-	private Long receiver;
+	@ManyToOne(targetEntity=User.class)
+	@JoinColumn(name = "receiver")
+	private User receiver;
 
 	public Long getId() {
 		return id;
@@ -56,11 +51,11 @@ public class Payment {
 		this.version = version;
 	}
 
-	public Long getEvent() {
+	public Event getEvent() {
 		return event;
 	}
 
-	public void setEvent(Long event) {
+	public void setEvent(Event event) {
 		this.event = event;
 	}
 
@@ -80,23 +75,23 @@ public class Payment {
 		this.timestamp = timestamp;
 	}
 
-	public Long getSender() {
+	public User getSender() {
 		return sender;
 	}
 
-	public void setSender(Long sender) {
+	public void setSender(User sender) {
 		this.sender = sender;
 	}
 
-	public Long getReceiver() {
+	public User getReceiver() {
 		return receiver;
 	}
 
-	public void setReceiver(Long receiver) {
+	public void setReceiver(User receiver) {
 		this.receiver = receiver;
 	}
 
-	public void populatePayment(Long event, BigDecimal amount, Long sender, Long receiver) {
+	public void populatePayment(Event event, BigDecimal amount, User sender, User receiver) {
 		this.event = event;
 		this.amount = amount;
 		this.sender = sender;

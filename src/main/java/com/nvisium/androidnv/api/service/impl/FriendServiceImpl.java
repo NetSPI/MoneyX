@@ -35,7 +35,6 @@ public class FriendServiceImpl implements FriendService {
 	@Autowired
 	FriendRequestRepository friendRequestRepository;
 
-	@Override
 	public void addFriend(Long sender) throws AlreadyFriendsException, InvalidFriendException {
 		/*
 		 * Sanity check - are we adding ourselves as friends
@@ -56,37 +55,31 @@ public class FriendServiceImpl implements FriendService {
 			throw new AlreadyFriendsException();
 	}
 
-	@Override
 	@Transactional
 	public void deleteFriend(Long friendId) {
 		friendRepository.deleteFriend(friendId);
 	}
 
-	@Override
 	public List<Friend> getFriends() {
 		return friendRepository.findFriendsByUser(security.getCurrentUserId());
 	}
 
-	@Override
 	public List<FriendRequest> getSentFriendRequests() {
 		return friendRequestRepository.findFriendRequestBySender(security
 				.getSecurityContext().getUser());
 	}
 
-	@Override
 	public List<FriendRequest> getReceivedFriendRequests() {
 		return friendRequestRepository.findFriendRequestByReceiver(security
 				.getSecurityContext().getUser());
 	}
 
 	// VULN - IDOR
-	@Override
 	@Transactional
 	public void deleteFriendRequest(Long id) {
 		friendRequestRepository.deleteFriendRequestById(id);
 	}
 
-	@Override
 	public void sendFriendRequest(Long receiver)
 			throws FriendRequestAlreadySentException, InvalidFriendRequestException {
 		/*
@@ -110,7 +103,6 @@ public class FriendServiceImpl implements FriendService {
 			throw new FriendRequestAlreadySentException();
 	}
 
-	@Override
 	public Long getFriendRequestSenderId(Long id) {
 		return friendRequestRepository.findSenderByFriendRequestId(id);
 	}
