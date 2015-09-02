@@ -3,18 +3,21 @@
 <%@ taglib prefix="t" tagdir="/WEB-INF/tags" %>
 
 <t:wrapper>
-    <h1>Events I'm Part Of</h1>
+    <h1>Shared Events</h1>
+    <h6><i>Who do I owe money to?</i></h6>
     <table class="table">
         <tr>
             <th>#</th>
-            <th>Total Amount</th>
-            <th>Event Name</th>
-            <th>Date Created</th>
-            <th>Pay</th>
+            <th>Owner</th>
+			<th>Total Amount</th>
+            <th>Event</th>
+            <th>Date</th>
+            <th>Pay Now</th>
         </tr>
         <c:forEach var="event" items="${events}">
         <tr>
         <td>${event.id}</td>
+        <td>${users.get(event.id).firstname} ${users.get(event.id).lastname}</td>
         <td>$${event.amount}</td>
         <td>${event.name}</td>
         <td>${event.created}</td>

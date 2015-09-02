@@ -153,6 +153,6 @@ public class PaymentController {
 		SecurityContextHolder.getContext().setAuthentication(authentication);
 		
 		redirectAttrs.addFlashAttribute("success", "Payment sent successfully!");
-		return "redirect:/dashboard";
+		return "redirect:/payment/list-sent/"+security.getCurrentUserId();
 	}
 }

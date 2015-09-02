@@ -1,7 +1,9 @@
 package com.nvisium.androidnv.api.controller;
 
 import java.math.BigDecimal;
+import java.util.HashMap;
 import java.util.LinkedList;
+import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -14,6 +16,7 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import com.nvisium.androidnv.api.model.Event;
 import com.nvisium.androidnv.api.model.EventMembership;
+import com.nvisium.androidnv.api.model.User;
 import com.nvisium.androidnv.api.security.SecurityUtils;
 import com.nvisium.androidnv.api.service.EventService;
 import com.nvisium.androidnv.api.service.UserService;
@@ -57,13 +60,17 @@ public class EventController {
 			Model model) {
 		java.util.List<EventMembership> events_m = eventService.getEventsByMembership(user);
 		java.util.List<Event> events = new java.util.ArrayList<Event>();
+		Map<Long, User> users = new HashMap<Long, User>();
+		
 		if (events_m.size() == 0) {
 			model.addAttribute("info", "User is not part of any events!");
 		} else {
 			for ( EventMembership e : events_m) {
 				events.add(eventService.getEventById(e.getEventId()));
+				users.put(e.getEventId(), userService.loadUserById(e.getUser()));
 			}
 			model.addAttribute("events", events);
+			model.addAttribute("users", users);
 		}
 	
 		return "event/list-member";
