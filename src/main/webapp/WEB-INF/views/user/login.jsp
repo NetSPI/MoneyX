@@ -10,7 +10,8 @@
 				aria-label="Close">
 				<span aria-hidden="true">&times;</span>
 			</button>
-			<strong>Error:</strong> Invalid username and/or password<br />
+			<strong>Error:</strong> Invalid username and/or password (${sessionScope.SPRING_SECURITY_LAST_EXCEPTION.message})
+			<br />
 		</div>
 	</c:if>
 
