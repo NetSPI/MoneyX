@@ -2,7 +2,6 @@ package com.nvisium.androidnv.api.controller;
 
 import java.math.BigDecimal;
 import java.util.HashMap;
-import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 
@@ -21,7 +20,6 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import com.nvisium.androidnv.api.model.EventMembership;
 import com.nvisium.androidnv.api.model.Event;
-import com.nvisium.androidnv.api.model.User;
 import com.nvisium.androidnv.api.model.Payment;
 import com.nvisium.androidnv.api.security.SecurityUtils;
 import com.nvisium.androidnv.api.service.EventService;
@@ -128,9 +126,9 @@ public class PaymentController {
 		if (!paymentService.makePayment(eventService.getEventById(eventId), amount)) {
 			model.addAttribute("danger", "Insufficient funds in your account!");
 			List<EventMembership> memberships = eventService.getEventsByMembership(security.getCurrentUserId());
-			List<Event> events = new java.util.ArrayList<Event>();
+			Map<EventMembership, Event> events = new HashMap<EventMembership, Event>();
 			for (EventMembership m: memberships) {
-				events.add(eventService.getEventById(m.getEventId()));
+				events.put(m, eventService.getEventById(m.getEventId()));
 			}
 			model.addAttribute("events", events);
 			return "payment/make-payment";

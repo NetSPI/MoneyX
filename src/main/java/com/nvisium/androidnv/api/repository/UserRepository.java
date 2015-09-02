@@ -61,7 +61,7 @@ public interface UserRepository extends CrudRepository<User, Long> {
 
 	@Modifying
 	@Transactional
-	@Query("update User u set u.balance = u.balance + ?2 where u.id = ?1")
+	@Query("update User u set u.balance = ?2 where u.id = ?1")
 	public void updateBalance(Long id, BigDecimal amount);
 
 	@Modifying

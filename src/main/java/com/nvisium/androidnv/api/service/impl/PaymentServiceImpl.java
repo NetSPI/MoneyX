@@ -48,25 +48,29 @@ public class PaymentServiceImpl implements PaymentService {
 	public boolean makePayment(Event event, BigDecimal amount) {
 		Payment payment = new Payment();
 		
-		EventMembership eventMembership = eventMembershipRepository.findOne(event.getId());
+		if (event == null) {
+			return false;
+		}
+		
+		EventMembership eventMembership = eventMembershipRepository.findEventMembershipByEventIdAndUserId(
+				event.getId(), security.getCurrentUserId());
 		if (eventMembership == null) {
 			return false;
 		}
-		Long eventId = eventMembership.getEventId();
-		
+				
 		if (amount.compareTo(userRepository.findById(security.getCurrentUserId()).getBalance()) == 1) {
 			return false;
 		}
-		User sender = userRepository.findById(security.getCurrentUserId());
+		User sender = security.getSecurityContext().getUser();
 		User receiver = userRepository.findById(eventRepository.getEventOwnerIdByEventId(event.getId()));
 
-		payment.populatePayment(event, amount, sender, receiver);
+		BigDecimal paidAmount = eventMembership.getAmount().min(amount);
+		
+		payment.populatePayment(event, paidAmount, sender, receiver);
 		paymentRepository.save(payment);
 		
-		BigDecimal paidAmount = eventMembership.getAmount().min(amount);
 		userService.debit(sender.getId(), paidAmount);
-		//userRepository.save(sender);
-		userService.credit(receiver.getId(),paidAmount);
+		userService.credit(receiver.getId(), paidAmount);
 		
 		if (eventMembership.getAmount().equals(paidAmount)) {
 			eventMembershipRepository.delete(eventMembership);
@@ -78,7 +82,7 @@ public class PaymentServiceImpl implements PaymentService {
 			}
 		} else {
 			System.out.println("reducing the amount");
-			eventMembershipRepository.makePayment(eventId, security.getCurrentUserId(), paidAmount);
+			eventMembershipRepository.makePayment(event.getId(), security.getCurrentUserId(), paidAmount);
 		}
 		
 		return true;

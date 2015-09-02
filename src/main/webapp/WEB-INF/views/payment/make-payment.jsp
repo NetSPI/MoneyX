@@ -12,8 +12,9 @@
             <div class="form-group">
             <label for="event">Choose a Shared Payment</label>
             <select id="event" name="event" class="form-control">
-            <c:forEach var="event" items="${events}">
-                <option value="${event.key.id}"> ${event.value.name} ($${event.key.amount})</option>
+            <c:forEach var="entry" items="${events}">
+                ${entry}
+                <option value="${entry.value.id}"> ${entry.value.name} ($${entry.key.amount})</option>
             </c:forEach>
             </select>
             </div>
