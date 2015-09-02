@@ -54,6 +54,7 @@ public class UserController {
 			@RequestParam(value = "answer", required = false) String answer,
 			@RequestParam(value = "firstname", required = false) String firstname,
 			@RequestParam(value = "lastname", required = false) String lastname,
+			@RequestParam(value = "next", required = false) String next,
 			Model model, RedirectAttributes redirectAttrs) {
 
 		/*
@@ -71,7 +72,11 @@ public class UserController {
 					firstname, lastname);
 			redirectAttrs.addFlashAttribute("success",
 					"Successfully registered!");
-			return new ModelAndView("redirect:/login");
+			if (next != null) {
+				return new ModelAndView("redirect:" + next);
+			} else {
+				return new ModelAndView("redirect:/login");
+			}
 		} else
 			model.addAttribute("error", "Username already taken!");
 		return new ModelAndView("user/register", "user", new User());
