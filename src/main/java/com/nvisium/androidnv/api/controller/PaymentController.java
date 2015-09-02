@@ -119,14 +119,17 @@ public class PaymentController {
 		List<EventMembership> memberships = eventService.getEventsByMembership(security.getCurrentUserId());
 		Map<Long, Event> events = new HashMap<Long, Event>();
 		Map<Long, User> users = new HashMap<Long, User>();
+		Map<Long, EventMembership> eventMemberships = new HashMap<Long, EventMembership>();
 				
 		 if (eventId == null && amount == null) {
 			for (EventMembership m: memberships) {
 				events.put(m.getEventId(), eventService.getEventById(m.getEventId()));
 				users.put(m.getEventId(), userService.loadUserById(m.getUser()));
+				eventMemberships.put(m.getEventId(), m);
 			}
 			model.addAttribute("users", users);
 			model.addAttribute("events", events);
+			model.addAttribute("memberships", eventMemberships);
 			return "payment/make-payment";
 		} else if (amount == null) {
 
