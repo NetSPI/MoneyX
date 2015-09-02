@@ -8,17 +8,17 @@
         <tr>
             <th>ID</th>
             <th>Amount</th>
+            <th>To</th>
             <th>Event</th>
-            <th>Receiver</th>
             <th>Timestamp</th>
         </tr>
         <c:forEach var="payment" items="${payments}">
         <tr>
         	<td>${payment.id}</td>
         	<td>$${payment.amount}<td>
-        	<td>${payment.event.name}</td>
-        	<td>${payment.receiver.firstname} ${payment.receiver.lastname}</td>
-        	<td>${payment.timestamp}</td>
+			<td>${payment.receiver.firstname} ${payment.receiver.lastname}</td>
+			<td>${payment.event.name}</td>
+			<td>${payment.timestamp}</td>
         </tr>
         </c:forEach>
     </table>

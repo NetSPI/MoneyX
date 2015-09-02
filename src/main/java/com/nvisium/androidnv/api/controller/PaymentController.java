@@ -23,6 +23,7 @@ import com.nvisium.androidnv.api.model.EventMembership;
 import com.nvisium.androidnv.api.model.Event;
 import com.nvisium.androidnv.api.model.NvUserDetails;
 import com.nvisium.androidnv.api.model.Payment;
+import com.nvisium.androidnv.api.model.User;
 import com.nvisium.androidnv.api.security.SecurityUtils;
 import com.nvisium.androidnv.api.service.EventService;
 import com.nvisium.androidnv.api.service.PaymentService;
@@ -114,24 +115,36 @@ public class PaymentController {
 			@RequestParam(value = "amount", required = false) BigDecimal amount,
 			RedirectAttributes redirectAttrs,
 			Model model) {
+		
+		List<EventMembership> memberships = eventService.getEventsByMembership(security.getCurrentUserId());
+		Map<Long, Event> events = new HashMap<Long, Event>();
+		Map<Long, User> users = new HashMap<Long, User>();
 				
-		 if (eventId == null || amount == null) {
-			List<EventMembership> memberships = eventService.getEventsByMembership(security.getCurrentUserId());
-			Map<EventMembership, Event> events = new HashMap<EventMembership, Event>();
+		 if (eventId == null && amount == null) {
 			for (EventMembership m: memberships) {
-				events.put(m, eventService.getEventById(m.getEventId()));
+				events.put(m.getEventId(), eventService.getEventById(m.getEventId()));
+				users.put(m.getEventId(), userService.loadUserById(m.getUser()));
 			}
+			model.addAttribute("users", users);
 			model.addAttribute("events", events);
 			return "payment/make-payment";
+		} else if (amount == null) {
+
+			events.put(eventId, eventService.getEventById(eventId));
+			users.put(eventId, userService.loadUserById(eventService.getEventById(eventId).getOwner()));
+			
+			model.addAttribute("users", users);
+			model.addAttribute("events", events);
+			return "payment/make-payment";			
 		}
 
 		if (!paymentService.makePayment(eventService.getEventById(eventId), amount)) {
 			model.addAttribute("danger", "Insufficient funds in your account!");
-			List<EventMembership> memberships = eventService.getEventsByMembership(security.getCurrentUserId());
-			Map<EventMembership, Event> events = new HashMap<EventMembership, Event>();
 			for (EventMembership m: memberships) {
-				events.put(m, eventService.getEventById(m.getEventId()));
+				events.put(m.getEventId(), eventService.getEventById(m.getEventId()));
+				users.put(m.getEventId(), userService.loadUserById(m.getUser()));
 			}
+			model.addAttribute("users", users);
 			model.addAttribute("events", events);
 			return "payment/make-payment";
 		}
@@ -142,6 +155,6 @@ public class PaymentController {
 		SecurityContextHolder.getContext().setAuthentication(authentication);
 		
 		redirectAttrs.addFlashAttribute("success", "Payment sent successfully!");
-		return "redirect:/dashboard";
+		return "redirect:/payment/list-sent/"+security.getCurrentUserId();
 	}
 }
