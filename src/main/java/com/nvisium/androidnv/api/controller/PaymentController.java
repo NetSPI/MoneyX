@@ -113,31 +113,37 @@ public class PaymentController {
 			@RequestParam(value = "amount", required = false) BigDecimal amount,
 			RedirectAttributes redirectAttrs,
 			Model model) {
+		
+		List<EventMembership> memberships = eventService.getEventsByMembership(security.getCurrentUserId());
+		Map<Long, Event> events = new HashMap<Long, Event>();
+		Map<Long, User> users = new HashMap<Long, User>();
 				
-		 if (eventId == null || amount == null) {
-			List<EventMembership> memberships = eventService.getEventsByMembership(security.getCurrentUserId());
-			Map<EventMembership, Event> events = new HashMap<EventMembership, Event>();
-			Map<Event, User> users = new HashMap<Event, User>();
+		 if (eventId == null && amount == null) {
 			for (EventMembership m: memberships) {
-				events.put(m, eventService.getEventById(m.getEventId()));
-				users.put(eventService.getEventById(m.getEventId()), userService.loadUserById(m.getUser()));
+				events.put(m.getEventId(), eventService.getEventById(m.getEventId()));
+				users.put(m.getEventId(), userService.loadUserById(m.getUser()));
 			}
 			model.addAttribute("users", users);
 			model.addAttribute("events", events);
 			return "payment/make-payment";
+		} else if (amount == null) {
+
+			events.put(eventId, eventService.getEventById(eventId));
+			users.put(eventId, userService.loadUserById(eventService.getEventById(eventId).getOwner()));
+			
+			model.addAttribute("users", users);
+			model.addAttribute("events", events);
+			return "payment/make-payment";			
 		}
 
 		if (!paymentService.makePayment(eventService.getEventById(eventId), amount)) {
 			model.addAttribute("danger", "Insufficient funds in your account!");
-			List<EventMembership> memberships = eventService.getEventsByMembership(security.getCurrentUserId());
-			Map<EventMembership, Event> events = new HashMap<EventMembership, Event>();
-			Map<Event, User> users = new HashMap<Event, User>();
 			for (EventMembership m: memberships) {
-				events.put(m, eventService.getEventById(m.getEventId()));
-				users.put(eventService.getEventById(m.getEventId()), userService.loadUserById(m.getUser()));
+				events.put(m.getEventId(), eventService.getEventById(m.getEventId()));
+				users.put(m.getEventId(), userService.loadUserById(m.getUser()));
 			}
-			model.addAttribute("events", events);
 			model.addAttribute("users", users);
+			model.addAttribute("events", events);
 			return "payment/make-payment";
 		}
 

@@ -10,6 +10,7 @@
             <th>Total Amount</th>
             <th>Event Name</th>
             <th>Date Created</th>
+            <th>Pay</th>
         </tr>
         <c:forEach var="event" items="${events}">
         <tr>
@@ -17,6 +18,7 @@
         <td>$${event.amount}</td>
         <td>${event.name}</td>
         <td>${event.created}</td>
+        <td><a href="/payment/make-payment?event=${event.id}"><span class="glyphicon glyphicon-usd" aria-hidden="true"></span></a></td>
         </tr>
         </c:forEach>
     </table>
