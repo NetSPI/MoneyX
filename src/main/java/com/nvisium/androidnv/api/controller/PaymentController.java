@@ -135,9 +135,15 @@ public class PaymentController {
 
 			events.put(eventId, eventService.getEventById(eventId));
 			users.put(eventId, userService.loadUserById(eventService.getEventById(eventId).getOwner()));
+			for (EventMembership em: memberships) {
+				if (eventId == em.getEventId()) {
+					eventMemberships.put(eventId, em);
+				}
+			}
 			
 			model.addAttribute("users", users);
 			model.addAttribute("events", events);
+			model.addAttribute("memberships", eventMemberships);
 			return "payment/make-payment";			
 		}
 
@@ -146,9 +152,11 @@ public class PaymentController {
 			for (EventMembership m: memberships) {
 				events.put(m.getEventId(), eventService.getEventById(m.getEventId()));
 				users.put(m.getEventId(), userService.loadUserById(m.getUser()));
+				eventMemberships.put(m.getEventId(), m);
 			}
 			model.addAttribute("users", users);
 			model.addAttribute("events", events);
+			model.addAttribute("memberships", eventMemberships);
 			return "payment/make-payment";
 		}
 
