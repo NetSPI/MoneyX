@@ -86,9 +86,10 @@ public class UserController {
 	// TODO: Modify this lookup to make in vulnerable to SQL Injection.
 	
 	@RequestMapping(value = "/profile/{id}", method = RequestMethod.GET)
-	public String getProfile(@PathVariable Long id, Model model, RedirectAttributes redirectAttrs) {
+	public String getProfile(@PathVariable String id, Model model, RedirectAttributes redirectAttrs) {
 		
-		model.addAttribute("user", userService.loadUserById(id));
+		model.addAttribute("user", userService.loadUserById(Long.getLong(id)));
+		model.addAttribute("id", id);
 		return "user/profile";
 	}
 	
