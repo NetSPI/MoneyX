@@ -15,7 +15,7 @@
         <c:forEach var="payment" items="${payments}">
         <tr>
         	<td>${payment.id}</td>
-        	<td>$${payment.amount}<td>
+        	<td>$${payment.amount}</td>
 			<td>${payment.receiver.firstname} ${payment.receiver.lastname}</td>
 			<td>${payment.event.name}</td>
 			<td>${payment.timestamp}</td>
