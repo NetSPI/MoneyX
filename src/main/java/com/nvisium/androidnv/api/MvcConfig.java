@@ -37,7 +37,7 @@ public class MvcConfig extends WebMvcAutoConfigurationAdapter{
         DaoAuthenticationProvider impl = new DaoAuthenticationProvider();
         impl.setUserDetailsService(new UserServiceImpl());
         impl.setHideUserNotFoundExceptions(false) ;
-        return impl ;
+        return impl;
     }
-
+    
 }

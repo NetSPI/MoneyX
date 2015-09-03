@@ -5,10 +5,17 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import javax.persistence.EntityManager;
+import javax.persistence.EntityTransaction;
+import javax.persistence.PersistenceContext;
+import javax.transaction.Transactional;
+
+import org.hibernate.Query;
+import org.hibernate.SessionFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.orm.hibernate4.SessionFactoryUtils;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
-import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Controller;
@@ -21,7 +28,6 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import com.nvisium.androidnv.api.model.EventMembership;
 import com.nvisium.androidnv.api.model.Event;
-import com.nvisium.androidnv.api.model.NvUserDetails;
 import com.nvisium.androidnv.api.model.Payment;
 import com.nvisium.androidnv.api.model.User;
 import com.nvisium.androidnv.api.security.SecurityUtils;
@@ -44,6 +50,9 @@ public class PaymentController {
 	
 	@Autowired
 	SecurityUtils security;
+	
+	@PersistenceContext
+    private EntityManager em;
 
 	/*
 	 * VULN: IDOR, Get a list of the payment transactions you've received
@@ -79,9 +88,10 @@ public class PaymentController {
 		return "payment/list-sent";
 	}
 	
+	@Transactional
 	@RequestMapping(value = "/balance", method = {RequestMethod.GET, RequestMethod.POST})
 	public String balance(
-			@RequestParam(value = "amount", required = false) BigDecimal amount,
+			@RequestParam(value = "amount", required = false) String amount,
 			@RequestParam(value = "creditcard", required = false) String creditcard,
 			RedirectAttributes redirectAttrs,
 			Model model) {
@@ -94,8 +104,9 @@ public class PaymentController {
 		/*
 		 * Credit card validation would be here if this were real :)
 		 */
-		
-		userService.credit(security.getCurrentUserId(), amount);
+
+		em.joinTransaction();
+		em.createNativeQuery("Update Users u set balance = balance + " + amount + "where id = " + security.getCurrentUserId()).executeUpdate();
 		
 		UserDetails currentUser = userService.loadUserByUsername(security.getSecurityContext().getUsername());
 		
