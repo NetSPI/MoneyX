@@ -5,7 +5,6 @@
 
 <t:wrapper>
 
-    <p>Link to profile: <a href="/profile/${id}">/profile/${id}</a>
 
         <div class="col-md-6">
             <h2 class="form-signin-heading">Edit Profile</h2>
@@ -47,6 +46,10 @@
             </form:form>
 
         </div>
+        
+    <div class="col-sm-12 text-center">
+    	<p></p><p>Current URL: <a href="/profile/${id}">/profile/${id}</a></p>
+    </div>
 
 
 </t:wrapper>
