@@ -16,6 +16,8 @@ import org.springframework.security.core.context.SecurityContextHolder;
 
 
 
+
+import com.nvisium.androidnv.api.model.Friend;
 import com.nvisium.androidnv.api.model.User;
 import com.nvisium.androidnv.api.security.SecurityUtils;
 import com.nvisium.androidnv.api.service.UserService;
@@ -138,7 +140,17 @@ public class UserController {
 	 */
 	@RequestMapping(value = "/get-public-users", method = RequestMethod.GET)
 	public String getPublicUsers(Model model) {
-		model.addAttribute("users", userService.getPublicUsers());
+		
+		User currentUser = security.getSecurityContext().getUser();
+		java.util.List<User> users = new java.util.ArrayList<User>();
+		
+		for(User u: userService.getPublicUsers()) {
+			if (!currentUser.getId().equals(u.getId())) {
+				users.add(u);
+			}
+		}
+		
+		model.addAttribute("users", users );
 		return "user/public-users";
 	}
 

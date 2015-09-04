@@ -3,7 +3,7 @@
 <%@ taglib prefix="t" tagdir="/WEB-INF/tags" %>
 
 <t:wrapper>
-    <h1>MoneyX Public Users</h1>
+    <h1>Find Friends</h1>
     <table class="table">
         <tr>
             <th>ID</th>

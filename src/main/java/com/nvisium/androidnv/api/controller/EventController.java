@@ -16,10 +16,13 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import com.nvisium.androidnv.api.model.Event;
 import com.nvisium.androidnv.api.model.EventMembership;
+import com.nvisium.androidnv.api.model.Friend;
 import com.nvisium.androidnv.api.model.User;
 import com.nvisium.androidnv.api.security.SecurityUtils;
 import com.nvisium.androidnv.api.service.EventService;
 import com.nvisium.androidnv.api.service.UserService;
+import com.nvisium.androidnv.api.service.FriendService;
+
 
 @RequestMapping(value = "/event")
 @Controller
@@ -30,6 +33,9 @@ public class EventController {
 	
 	@Autowired
 	UserService userService;
+
+	@Autowired
+	FriendService friendService;	
 	
 	@Autowired
 	SecurityUtils security;
@@ -95,7 +101,19 @@ public class EventController {
 		
 		/* If we need anything, let's just take the user to the add page */
 		if (name == null || amount == null) {
-			model.addAttribute("users", userService.getPublicUsers());
+			
+			User currentUser = security.getSecurityContext().getUser();
+			java.util.List<User> friends = new java.util.ArrayList<User>();
+			
+			for(Friend f: friendService.getFriends()) {
+				if (currentUser.getId().equals(f.getUser1().getId())) {
+					friends.add(f.getUser2());
+				} else {
+					friends.add(f.getUser1());
+				}
+			}
+			
+			model.addAttribute("users", friends);
 			return "event/add-event";
 		}
 		
