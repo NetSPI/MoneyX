@@ -35,9 +35,16 @@
                         <input class="form-control" value="${user.email}" type="text" name="email">
                     </div>
                 </div>
+                <div class="col-md-10 text-center">
+            		<p>
+            			<h4 class="form-signin-heading">Account Balance: <a href="/payment/balance">$${user.balance}</a> </h4>
+            		</p>
+        		</div>
                 
                 	<button class="btn btn-primary btn-block" type="submit">Update</button>
             </form:form>
+
         </div>
+
 
 </t:wrapper>
