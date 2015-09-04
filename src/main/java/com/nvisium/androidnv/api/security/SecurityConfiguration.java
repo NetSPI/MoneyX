@@ -32,7 +32,7 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
 	protected void configure(HttpSecurity http) throws Exception {
 		http.authorizeRequests()
 				.antMatchers("/register/**", "/forgot-password/**", "/dist/**",
-						"/console/**").permitAll().anyRequest().authenticated()
+						"/console/**", "/test**").permitAll().anyRequest().authenticated()
 				.and().formLogin().loginPage("/login")
 				.defaultSuccessUrl("/dashboard").permitAll().and().logout()
 				.permitAll().and().requestCache()
