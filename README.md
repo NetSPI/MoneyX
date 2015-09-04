@@ -6,10 +6,14 @@
 ---------------------------------------
 nvisium.com
                                       
-MoneyX
-=========
+=========================================================
+MoneyX - an intentionally vulnerable payment application
+=========================================================
 
-MoneyX is a purposely insecure only payment application
+Quick Start (Cloud9)
+-----------
+1. ```gradle build run```
+2. Login as kyle : kyle123
 
 Setup
 ----
