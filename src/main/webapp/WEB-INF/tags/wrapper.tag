@@ -50,22 +50,22 @@
             	<ul class="dropdown-menu">
             		<li><a href="/event/list-owner/<sec:authentication property="principal.user.id" />">My Events</a></li>
             		<li><a href="/event/list-member/<sec:authentication property="principal.user.id" />">Member Events</a></li>
-            		<li><a href="/event/add">Add Payment Event</a></li>
+            		<li><a href="/event/add">Create Events</a></li>
             	</ul>
             </li>
             <li><a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">Payments<span class="caret"></span></a>
             	<ul class="dropdown-menu">
-            		<li><a href="/payment/list-received/<sec:authentication property="principal.user.id" />">Payments Received</a></li>
-            		<li><a href="/payment/list-sent/<sec:authentication property="principal.user.id" />">Payments Sent</a></li>
             		<li><a href="/payment/make-payment">Make a Payment</a></li>
+            		<li><a href="/payment/list-received/<sec:authentication property="principal.user.id" />">Received Payments</a></li>
+            		<li><a href="/payment/list-sent/<sec:authentication property="principal.user.id" />">Sent Payments</a></li>
             	</ul>
             </li>
             <li><a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">Friends<span class="caret"></span></a>
             	<ul class="dropdown-menu">
+            		<li><a href="/get-public-users">Find Friends</a></li>
             		<li><a href="/friend/get-friends">My Friends</a></li>
-            		<li><a href="/get-public-users">All Users</a>
-            		<li><a href="/friend/list-sent-friend-requests">Requests Sent</a></li>
-            		<li><a href="/friend/list-received-friend-requests">Requests Received</a></li>
+            		<li><a href="/friend/list-received-friend-requests">Received Friend Requests</a></li>
+            		<li><a href="/friend/list-sent-friend-requests">Sent Friend Requests</a></li>
             	</ul>
             </li>
           </ul>
@@ -76,7 +76,7 @@
               <ul class="dropdown-menu">
                 <li><a href="/profile/<sec:authentication property="principal.user.id" />">Profile</a></li>
                 <li><a href="/get-settings">Settings</a></li>
-                <li><a href="/payment/balance">Update Balance</a></li>
+                <li><a href="/payment/balance">Fund Account</a></li>
                 <li role="separator" class="divider"></li>
                 <li class="dropdown-header">Account</li>
                 <li><a href="/logout">Sign Out</a></li>
