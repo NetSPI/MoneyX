@@ -13,10 +13,10 @@
         </tr>
         <c:forEach var="event" items="${events}">
         <tr>
-        <td>${event.id}</td>
-        <td>${event.name}</td>
-        <td>${event.amount}</td>
-        <td>${event.completed}</td>
+        <td><c:out value="${event.id}"/></td>
+        <td><c:out value="${event.name}"/></td>
+        <td><c:out value="${event.amount}"/></td>
+        <td><c:out value="${event.completed}"/></td>
         </tr>
         </c:forEach>
     </table>
@@ -24,12 +24,12 @@
     <c:forEach var="event" items="${events}">
     <div class="row dashboard-row">
         <div class="col-md-2">
-            <p><h1>$${event.amount}</h1></p>
+            <p><h1>$<c:out value="${event.amount}"/></h1></p>
         </div>
         <div class="col-md-7">
-            <h3>${event.name}</h3>
+            <h3><c:out value="${event.name}"/></h3>
             <c:forEach var="user" items="${users[event]}">
-                ${user.firstname} ${user.lastname}
+                <c:out value="${user.firstname}"/> <c:out value="${user.lastname}"/>
             </c:forEach>
         </div>
         <div class="col-md-1 text-center">

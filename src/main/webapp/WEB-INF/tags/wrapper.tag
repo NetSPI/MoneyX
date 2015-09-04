@@ -98,6 +98,12 @@
 
     <div class="container" role="main">
 
+    <c:if test="${not empty param.info}">
+    <div class="alert alert-info alert-dismissible" role="danger">
+      ${param.info}
+    </div>
+    </c:if>
+
     <c:if test="${not empty danger}">
     <div class="alert alert-danger alert-dismissible" role="danger">
         ${danger}

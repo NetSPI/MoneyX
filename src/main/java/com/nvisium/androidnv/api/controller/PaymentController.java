@@ -59,9 +59,16 @@ public class PaymentController {
 	 */
 	@RequestMapping(value = "/list-received/{id}", method = RequestMethod.GET)
 	public String listReceivedPayments(
-			@PathVariable Long id,
+			@PathVariable String id,
 			Model model) {
-		List<Payment> payments = paymentService.getReceivedPayments(userService.loadUserById(id));
+		
+		//List<Payment> payments = paymentService.getReceivedPayments(userService.loadUserById(id));
+		@SuppressWarnings("unchecked")
+		List<Payment> payments = 
+				em.createNativeQuery("select * from Payments p where p.receiver = " + id, Payment.class)
+				.getResultList();
+
+		
 		if (payments.size() == 0) {
 			model.addAttribute("info", "User has not received any payments!");
 		}
@@ -74,16 +81,20 @@ public class PaymentController {
 	 */
 	@RequestMapping(value = "/list-sent/{id}", method = RequestMethod.GET)
 	public String listSentPayments(
-			@PathVariable Long id,
+			@PathVariable String id,
 			Model model) {
-		List<Payment> payments = paymentService.getSentPayments(userService.loadUserById(id));
+		
+		// List<Payment> payments = paymentService.getSentPayments(userService.loadUserById(id));
+		@SuppressWarnings("unchecked")
+		List<Payment> payments = 
+				em.createNativeQuery("select * from Payments p where p.sender = " + id, Payment.class)
+				.getResultList();
 		
 		if (payments.size() == 0) {
 			model.addAttribute("info", "User has not sent any payments!");
 		} else {
 			model.addAttribute("payments", payments);
 		}
-		
 		
 		return "payment/list-sent";
 	}

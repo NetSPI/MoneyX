@@ -5,6 +5,8 @@
 
 <t:wrapper>
 
+    <p>Link to profile: <a href="/profile/${id}">/profile/${id}</a>
+
         <div class="col-md-6">
             <h2 class="form-signin-heading">Edit Profile</h2>
             <form:form class="form-signin form-horizontal" action="/profile/${user.id}" method="post">
