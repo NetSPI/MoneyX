@@ -8,7 +8,7 @@ Security Misconfiguration issues can occur in the web application itself, the ap
 
 #### Code Snippet
 
-com.nVisium.androidnv.api.security.SecurityConfiguration
+src/main/java/com/nVisium/androidnv/api/security/SecurityConfiguration.java
 
 ```
 	@Override
@@ -24,7 +24,7 @@ com.nVisium.androidnv.api.security.SecurityConfiguration
 		http.headers().frameOptions().disable();
 	}
 ```
-application.properties
+src/main/resources/application.properties
 
 ```
 # ...

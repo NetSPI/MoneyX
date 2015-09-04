@@ -11,7 +11,7 @@ Most common XSS attacks attempt to either steal user cookie information (contain
 There are usually two broad forms of XSS: stored XSS, and reflected XSS. Reflected XSS is usually parsed from a URL or some other client-only input, and affects the user without any interaction from the server. Reflected XSS is much harder to detect, since there is no interaction with the server as the user is hijacked. On the other hand, stored XSS is usually sent as input to the server and saved in a database. Any time the page with the payload is loaded, it will replay the exploit. While easier to detect, stored XSS can have a wider reaching impact on the end user.
 
 #### Code Snippet
-views/event/list-owned.jsp
+src/main/webapp/WEB-INF/views/event/list-owned.jsp
 
 ```
 <h1>My Events</h1>
@@ -34,7 +34,7 @@ views/event/list-owned.jsp
     </c:forEach>
 </table>
 ```
-wrapper.tag
+src/main/webapp/WEB-INF/tags/wrapper.tag
 
 ```
 <c:if test="${not empty param.info}">
@@ -43,7 +43,7 @@ wrapper.tag
 </div>
 </c:if>
 ```
-view/user/profile.jsp
+src/main/webapp/WEB-INF/view/user/profile.jsp
 
 ```
 <p>Link to profile: <a href="/profile/${id}">/profile/${id}</a>

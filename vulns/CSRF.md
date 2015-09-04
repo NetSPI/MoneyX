@@ -8,7 +8,7 @@ CSRF attacks are sometimes thought of as being only applicable to GET requests, 
 
 #### Code Snippet
 
-com.nVisium.androidnv.api.controller.PaymentController
+src/main/java/com/nVisium/androidnv/api/controller/PaymentController.java
 
 ```
 	@RequestMapping(value = "/make-payment", method = {RequestMethod.GET, RequestMethod.POST})
@@ -35,7 +35,7 @@ com.nVisium.androidnv.api.controller.PaymentController
 	}
 
 ```
-com.nVisium.androidnv.api.security.SecurityConfiguration
+src/main/java/com/nVisium/androidnv/api/security/SecurityConfiguration.java
 
 ```
 http.authorizeRequests()

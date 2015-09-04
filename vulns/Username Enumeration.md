@@ -8,7 +8,7 @@ It is debateable whether username enumeration actually presents a serious securi
 
 #### Code Snippet
 
-com.nVisium.androidnv.api.MvcConfig
+src/main/java/com/nVisium/androidnv/api/MvcConfig.java
 
 ```
     @Bean
@@ -21,7 +21,7 @@ com.nVisium.androidnv.api.MvcConfig
 	}
 
 ```
-login.jsp
+src/main/webapp/WEB-INF/views/user/login.jsp
 
 ```
 	<c:if test="${param.error != null}">

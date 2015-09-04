@@ -8,7 +8,7 @@ In order for this problem to be an *insecure* direct object reference, it should
 
 #### Code Snippet
 
-com.nVisium.androidnv.api.controller.PaymentController
+src/main/java/com/nVisium/androidnv/api/controller/PaymentController.java
 
 ```
 	@RequestMapping(value = "/list-received/{id}", method = RequestMethod.GET)
@@ -20,7 +20,7 @@ com.nVisium.androidnv.api.controller.PaymentController
 	}
 
 ```
-com.nVisium.androidnv.api.controller.EventController
+src/main/java/com/nVisium/androidnv/api/controller/EventController.java
 
 ```
 	@RequestMapping(value = "/list-member/{user}", method = RequestMethod.GET)

@@ -28,7 +28,7 @@ One important point is that simply hiding the result of a query is not enough to
 
 #### Code Snippet
 
-com.nVisium.androidnv.api.controller.PaymentController
+src/main/java/com/nVisium/androidnv/api/controller/PaymentController.java
 
 ```
 @Transactional
@@ -49,7 +49,7 @@ public String balance(
 	
 	// ---
 ```
-com.nVisium.androidnv.api.controller.PaymentController
+src/main/java/com/nVisium/androidnv/api/controller/PaymentController.java
 
 ```
 @RequestMapping(value = "/list-sent/{id}", method = RequestMethod.GET)
@@ -64,7 +64,7 @@ public String listSentPayments(
 		
 	// ---
 ```
-com.nVisium.androidnv.api.controller.PaymentController
+src/main/java/com/nVisium/androidnv/api/controller/PaymentController.java
 
 ```
 @RequestMapping(value = "/list-received/{id}", method = RequestMethod.GET)

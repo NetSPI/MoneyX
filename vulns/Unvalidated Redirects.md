@@ -10,7 +10,7 @@ Unvalidated Redirects are sometimes not considered a direct vulnerability since 
 
 #### Code Snippet
 
-com.nVisium.androidnv.api.controller.UserController
+src/main/java/com/nVisium/androidnv/api/controller/UserController.java
 
 ```
 // ---
