@@ -103,7 +103,7 @@ public class EventController {
 		
 		if (users != null && users.size() > 0) {
 			for (Long tempUserId: users) {
-				eventService.addEventMembership(eventId, tempUserId, amount.divide(new BigDecimal(users.size())));
+				eventService.addEventMembership(eventId, tempUserId, amount.divide(new BigDecimal(users.size()),BigDecimal.ROUND_UP));
 			}
 		}
 				
