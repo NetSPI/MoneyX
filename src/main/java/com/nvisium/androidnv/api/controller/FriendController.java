@@ -12,12 +12,19 @@ import com.nvisium.androidnv.api.exception.AlreadyFriendsException;
 import com.nvisium.androidnv.api.exception.FriendRequestAlreadySentException;
 import com.nvisium.androidnv.api.exception.InvalidFriendException;
 import com.nvisium.androidnv.api.exception.InvalidFriendRequestException;
+import com.nvisium.androidnv.api.security.SecurityUtils;
 import com.nvisium.androidnv.api.service.FriendService;
+import com.nvisium.androidnv.api.model.Friend;
+import com.nvisium.androidnv.api.model.User;
 import com.nvisium.androidnv.api.service.UserService;
+import com.nvisium.androidnv.api.security.SecurityUtils;
 
 @RequestMapping(value = "/friend")
 @Controller
 public class FriendController {
+	
+	@Autowired
+	SecurityUtils security;
 
 	@Autowired
 	FriendService friendService;
@@ -37,7 +44,7 @@ public class FriendController {
 			return listFriends(model);
 		}
 		
-		friendService.deleteFriend(friend);
+		friendService.deleteFriend(userService.loadUserById(friend));
 		model.addAttribute("success", "Friend was successfully removed");
 		return listFriends(model);
 	}
@@ -45,7 +52,19 @@ public class FriendController {
 	@RequestMapping(value = "/get-friends", method = RequestMethod.GET)
 	public String listFriends(
 			Model model) {
-		model.addAttribute("friends", friendService.getFriends());
+		
+		User currentUser = security.getSecurityContext().getUser();
+		java.util.List<User> friends = new java.util.ArrayList<User>();
+		
+		for(Friend f: friendService.getFriends()) {
+			if (currentUser.getId().equals(f.getUser1().getId())) {
+				friends.add(f.getUser2());
+			} else {
+				friends.add(f.getUser1());
+			}
+		}
+		
+		model.addAttribute("friends",friends);
 		return "friend/get-friends";
 	}
 
@@ -64,7 +83,7 @@ public class FriendController {
 	@RequestMapping(value = "/send-friend-request/{receiver}", method = RequestMethod.GET)
 	public String send(@PathVariable Long receiver, Model model) {
 		try {
-			friendService.sendFriendRequest(receiver);
+			friendService.sendFriendRequest(userService.loadUserById(receiver));
 			model.addAttribute("success", "User has been sent a friend request!");
 		} catch (FriendRequestAlreadySentException e) {
 			model.addAttribute("error", "User has already been sent a friend request!");
@@ -79,7 +98,7 @@ public class FriendController {
 	 */
 	@RequestMapping(value = "/accept-friend-request/{id}", method = RequestMethod.GET)
 	public String accept(@PathVariable Long id, Model model) {
-		Long sender = friendService.getFriendRequestSenderId(id);
+		User sender = friendService.getFriendRequestSenderId(id);
 		try {
 			friendService.addFriend(sender);
 			friendService.deleteFriendRequest(id);

@@ -23,7 +23,7 @@ public interface FriendRequestRepository extends
 	public List<FriendRequest> findFriendRequestByReceiver(User receiver);
 
 	@Query("select f.sender from FriendRequest f where f.id = ?1")
-	public Long findSenderByFriendRequestId(Long id);
+	public User findSenderByFriendRequestId(Long id);
 
 	@Query("delete from FriendRequest where id = ?1")
 	@Modifying

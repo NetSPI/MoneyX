@@ -1,12 +1,6 @@
 package com.nvisium.androidnv.api.model;
 
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
-import javax.persistence.Table;
-import javax.persistence.Version;
+import javax.persistence.*;
 
 @Entity
 @Table(name = "friends")
@@ -19,11 +13,13 @@ public class Friend {
 	@Version
 	private Long version;
 
-	@Column(name = "user1")
-	private Long user1;
+	@ManyToOne(targetEntity=User.class)
+	@JoinColumn(name = "user1")
+	private User user1;
 
-	@Column(name = "user2")
-	private Long user2;
+	@ManyToOne(targetEntity=User.class)
+	@JoinColumn(name = "user2")
+	private User user2;
 
 	public Long getId() {
 		return id;
@@ -41,19 +37,19 @@ public class Friend {
 		this.version = version;
 	}
 
-	public Long getUser1() {
+	public User getUser1() {
 		return user1;
 	}
 
-	public void setUser1(Long user1) {
+	public void setUser1(User user1) {
 		this.user1 = user1;
 	}
 
-	public Long getUser2() {
+	public User getUser2() {
 		return user2;
 	}
 
-	public void setUser2(Long user2) {
+	public void setUser2(User user2) {
 		this.user2 = user2;
 	}
 }

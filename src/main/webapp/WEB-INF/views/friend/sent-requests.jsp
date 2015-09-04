@@ -17,5 +17,10 @@
         <td><a href="/friend/delete-friend-request/${req.id}"><span class="glyphicon glyphicon-remove" aria-hidden="true"></span></a></td>
         </tr>
         </c:forEach>
+        <tr>
+            <td colspan="3" align="right">
+        	<a href="/get-public-users"><span class="glyphicon glyphicon-plus" aria-hidden="true" title="Add Users"></span></a>
+        	</td>
+        </tr>
     </table>
 </t:wrapper>

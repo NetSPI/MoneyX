@@ -1,12 +1,6 @@
 package com.nvisium.androidnv.api.model;
 
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
-import javax.persistence.Table;
-import javax.persistence.Version;
+import javax.persistence.*;
 
 @Entity
 @Table(name = "friendRequest")
@@ -19,10 +13,12 @@ public class FriendRequest {
 	@Version
 	private Long version;
 
-	@Column(name = "sender", length = 100000)
+	@ManyToOne(targetEntity=User.class)
+	@JoinColumn(name = "receiver")
 	private User receiver;
 
-	@Column(name = "receiver", length = 100000)
+	@ManyToOne(targetEntity=User.class)
+	@JoinColumn(name = "sender")
 	private User sender;
 
 	public Long getId() {

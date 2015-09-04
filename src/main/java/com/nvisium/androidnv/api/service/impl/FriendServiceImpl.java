@@ -13,6 +13,7 @@ import com.nvisium.androidnv.api.exception.InvalidFriendException;
 import com.nvisium.androidnv.api.exception.InvalidFriendRequestException;
 import com.nvisium.androidnv.api.model.Friend;
 import com.nvisium.androidnv.api.model.FriendRequest;
+import com.nvisium.androidnv.api.model.User;
 import com.nvisium.androidnv.api.repository.FriendRepository;
 import com.nvisium.androidnv.api.repository.FriendRequestRepository;
 import com.nvisium.androidnv.api.repository.UserRepository;
@@ -35,20 +36,20 @@ public class FriendServiceImpl implements FriendService {
 	@Autowired
 	FriendRequestRepository friendRequestRepository;
 
-	public void addFriend(Long sender) throws AlreadyFriendsException, InvalidFriendException {
+	public void addFriend(User sender) throws AlreadyFriendsException, InvalidFriendException {
 		/*
 		 * Sanity check - are we adding ourselves as friends
 		 */
-		if (security.getCurrentUserId() == sender) {
+		User currentUser = security.getSecurityContext().getUser();
+		if (currentUser == sender) {
 			throw new InvalidFriendException();
 		}
 		/*
 		 * Has invitation already been sent?
 		 */
-		if (friendRepository.findExistingFriend(sender,
-				security.getCurrentUserId()) == null) {
+		if (friendRepository.findExistingFriend(sender, currentUser) == null) {
 			Friend friend = new Friend();
-			friend.setUser1(security.getCurrentUserId());
+			friend.setUser1(currentUser);
 			friend.setUser2(sender);
 			friendRepository.save(friend);
 		} else
@@ -56,22 +57,21 @@ public class FriendServiceImpl implements FriendService {
 	}
 
 	@Transactional
-	public void deleteFriend(Long friendId) {
-		friendRepository.deleteFriend(friendId);
+	public void deleteFriend(User friend) {
+		friendRepository.deleteFriend(friend);
 	}
 
 	public List<Friend> getFriends() {
-		return friendRepository.findFriendsByUser(security.getCurrentUserId());
+		User currentUser = security.getSecurityContext().getUser();
+		return friendRepository.findFriendsByUser(currentUser);
 	}
 
 	public List<FriendRequest> getSentFriendRequests() {
-		return friendRequestRepository.findFriendRequestBySender(security
-				.getSecurityContext().getUser());
+		return friendRequestRepository.findFriendRequestBySender(security.getSecurityContext().getUser());
 	}
 
 	public List<FriendRequest> getReceivedFriendRequests() {
-		return friendRequestRepository.findFriendRequestByReceiver(security
-				.getSecurityContext().getUser());
+		return friendRequestRepository.findFriendRequestByReceiver(security.getSecurityContext().getUser());
 	}
 
 	// VULN - IDOR
@@ -80,30 +80,31 @@ public class FriendServiceImpl implements FriendService {
 		friendRequestRepository.deleteFriendRequestById(id);
 	}
 
-	public void sendFriendRequest(Long receiver)
+	public void sendFriendRequest(User receiver)
 			throws FriendRequestAlreadySentException, InvalidFriendRequestException {
 		/*
 		 * Sanity check - did we send ourselves a friend request?
 		 */
+		
+		User currentUser = security.getSecurityContext().getUser();
 
-		if (security.getCurrentUserId() == receiver) {
+		if (currentUser == receiver) {
 			throw new InvalidFriendRequestException();
 		}
 		
 		/*
 		 * Has invitation already been sent?
 		 */
-		if (friendRequestRepository.findFriendRequestBySenderAndReceiver(
-				userRepository.findById(receiver), security.getSecurityContext().getUser()) == null) {
+		if (friendRequestRepository.findFriendRequestBySenderAndReceiver(receiver, currentUser) == null) {
 			FriendRequest friendRequest = new FriendRequest();
-			friendRequest.setSender(security.getSecurityContext().getUser());
-			friendRequest.setReceiver(userRepository.findById(receiver));
+			friendRequest.setSender(currentUser);
+			friendRequest.setReceiver(receiver);
 			friendRequestRepository.save(friendRequest);
 		} else
 			throw new FriendRequestAlreadySentException();
 	}
 
-	public Long getFriendRequestSenderId(Long id) {
+	public User getFriendRequestSenderId(Long id) {
 		return friendRequestRepository.findSenderByFriendRequestId(id);
 	}
 }
