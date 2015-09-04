@@ -1,7 +1,6 @@
 package com.nvisium.androidnv.api.controller;
 
 import java.util.HashMap;
-import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 
@@ -10,6 +9,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RequestParam;
 
 import com.nvisium.androidnv.api.model.Event;
 import com.nvisium.androidnv.api.model.EventMembership;
@@ -26,6 +26,9 @@ public class DashboardController {
 
 	@Autowired
 	EventService eventService;
+<<<<<<< HEAD
+
+=======
 	
 	@Autowired
 	SecurityUtils security;
@@ -36,16 +39,21 @@ public class DashboardController {
 	@Autowired
 	PaymentService paymentService;
 	
+>>>>>>> 542d16292a50e46b7100659b1231076068f488f6
 	@RequestMapping(value = "/", method = RequestMethod.GET)
 	public String listReceivedPayments() {
 		return "index";
 	}
-	
+
 	@RequestMapping(value = "/dashboard", method = RequestMethod.GET)
 	public String dashboard(Model model) {
 		List<Event> owned = eventService.getEventsByOwner(security.getCurrentUserId());
 		Map<Event, List<User>> users = new HashMap<Event, List<User>>();
+<<<<<<< HEAD
+		for (Event e : events) {
+=======
 		for (Event e: owned) {
+>>>>>>> 542d16292a50e46b7100659b1231076068f488f6
 			users.put(e, eventService.getUsersbyEventMembership(e.getId()));
 		}
 		List<EventMembership> memberships = eventService.getEventsByMembership(security.getCurrentUserId());
@@ -65,5 +73,11 @@ public class DashboardController {
 		model.addAttribute("sent", sent);
 		model.addAttribute("received", received);
 		return "dashboard";
+	}
+
+	@RequestMapping(value = "/test", method = RequestMethod.GET)
+	public String test(
+			@RequestParam(required = false, value = "@environment.getProperty('user')") String test) {
+		return "test";
 	}
 }
