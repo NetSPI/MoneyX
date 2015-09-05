@@ -26,8 +26,14 @@ The attacker has now successfully dropped our entire users table!
 
 One important point is that simply hiding the result of a query is not enough to prevent SQL injection attacks from occuring. One class of attack, known as [Blind SQL Injections](https://www.owasp.org/index.php/Blind_SQL_Injection), operate on the premise that an application is vulnerable to attack but does not have direct output based on the result of the query.
 
-#### Code Snippet
+#### Problem
+URL: http://localhost:8080/payment/balance, http://localhost:8080/payment/list-sent/1, http://localhost:8080/payment/list-received/1
 
+MoneyX's has three difference instances of raw SQL queries in its ```PaymentController```. On both the pages to list sent payments and to list received payments, the sysem executes a raw ```SELECT * FROM PAYMENTS``` query to pull any relevant rows from the table. In the user balance update method, it performs the addition to the user balance with another raw SQL query.
+
+In all three cases, the code does not adequately protect against SQL injection attacks. The query is made by simply concatenating user input before it is send to the database, and there are no assurances that the user really inputs an ID or dollar amount like they are supposed to.
+
+#### Code Snippet
 src/main/java/com/nVisium/androidnv/api/controller/PaymentController.java
 
 ```
@@ -80,12 +86,6 @@ public String listReceivedPayments(
 			
 	// ---
 ```
-
-#### Problem
-
-MoneyX's has three difference instances of raw SQL queries in its ```PaymentController```. On both the pages to list sent payments and to list received payments, the sysem executes a raw ```SELECT * FROM PAYMENTS``` query to pull any relevant rows from the table. In the user balance update method, it performs the addition to the user balance with another raw SQL query.
-
-In all three cases, the code does not adequately protect against SQL injection attacks. The query is made by simply concatenating user input before it is send to the database, and there are no assurances that the user really inputs an ID or dollar amount like they are supposed to.
 
 #### Solution
 

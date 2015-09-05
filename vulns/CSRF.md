@@ -6,9 +6,13 @@ A Cross-site Request Forgery (CSRF) attack is one in which the user's browser is
 
 CSRF attacks are sometimes thought of as being only applicable to GET requests, but POST requests work just as well. A user simply needs to be manipulated into visiting a malicious website or clicking a malicious link to fall victim to the attack.
 
-#### Code Snippet
+#### Problem
+URL: http://localhost:8080/payment/make-payment?event=2&amount=10.00
 
-src/main/java/com/nVisium/androidnv/api/controller/PaymentController.java
+In MoneyX, the ```/make-payment``` controller action accepts either a GET or a POST request. It makes no attempt to validate that the user has the proper authentication to make the request. Since the application was also configured in ```SecurityConfiguration``` to disable Spring Security's default CSRF protection, any attacker who forces an unsuspecting user's browser to navigate to ```/make-payment``` can initiate a transfer for an existing event!
+
+#### Code Snippet
+Location: src/main/java/com/nVisium/androidnv/api/controller/PaymentController.java
 
 ```
 	@RequestMapping(value = "/make-payment", method = {RequestMethod.GET, RequestMethod.POST})
@@ -46,10 +50,6 @@ http.authorizeRequests()
 				.permitAll().and().requestCache()
 				.requestCache(new NullRequestCache()).and().csrf().disable();
 ```
-
-#### Problem
-
-In MoneyX, the ```/make-payment``` controller action accepts either a GET or a POST request. It makes no attempt to validate that the user has the proper authentication to make the request. Since the application was also configured in ```SecurityConfiguration``` to disable Spring Security's default CSRF protection, any attacker who forces an unsuspecting user's browser to navigate to ```/make-payment``` can initiate a transfer for an existing event!
 
 #### Solution
 
