@@ -6,8 +6,12 @@ Username Enumeration refers to the ability of an attacker to determine which use
 
 It is debateable whether username enumeration actually presents a serious security risk. Some websites choose to make clear to the user if their username was typed in incorrectly as a matter of username experience. However, it is simple to ensure that error messages are not specific about whether your username or password was incorrect.
 
-#### Code Snippet
+#### Problem
+URL: http://localhost:8080/login
 
+The MoneyX developers attempted to make their login page more user friendly by specifying exactly what occurs when the user enters the incorrect information. If the user's password is incorrect, the application will display the string "Bad Credentials" on the page. However, if the username is incorrect, the application will not display the string.
+
+#### Code Snippet
 src/main/java/com/nVisium/androidnv/api/MvcConfig.java
 
 ```
@@ -35,10 +39,6 @@ src/main/webapp/WEB-INF/views/user/login.jsp
 		</div>
 	</c:if>
 ```
-
-#### Problem
-
-The MoneyX developers attempted to make their login page more user friendly by specifying exactly what occurs when the user enters the incorrect information. If the user's password is incorrect, the application will display the string "Bad Credentials" on the page. However, if the username is incorrect, the application will not display the string.
 
 #### Solution
 

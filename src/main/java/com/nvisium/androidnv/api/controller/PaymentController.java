@@ -146,7 +146,7 @@ public class PaymentController {
 		 if (eventId == null && amount == null) {
 			for (EventMembership m: memberships) {
 				events.put(m.getEventId(), eventService.getEventById(m.getEventId()));
-				users.put(m.getEventId(), userService.loadUserById(m.getUser()));
+				users.put(m.getEventId(), userService.loadUserById(eventService.getEventById(m.getEventId()).getOwner()));
 				eventMemberships.put(m.getEventId(), m);
 			}
 			model.addAttribute("users", users);

@@ -8,8 +8,12 @@ Unvalidated redirects are common after users authenticate themselves on a websit
 
 Unvalidated Redirects are sometimes not considered a direct vulnerability since they do not affect users of your website. However, they have the potential to affect users of any website and harm the reputation of your site. It is best to avoid allowing such redirects so malicious attackers cannot damage brand reputation by piggybacking off your users' trust.
 
-#### Code Snippet
+#### Problem
+URL: http://localhost:8080/register?next=/payment/make-payment
 
+MoneyX's registration controller action takes an optional ```next``` parameter that determines where the user browser is redirected to after registration. This feature was added so the user could be redirect to different versions of the login page, or even the main page of the application, without even modifying the main registration Java code. However, there is no validation that the path passed in is part of the application. In fact, passing in ```next=http%3A%2F%2Fevil.com``` results in a malicious browser redirect!
+
+#### Code Snippet
 src/main/java/com/nVisium/androidnv/api/controller/UserController.java
 
 ```
@@ -27,10 +31,6 @@ if (next != null) {
 
 // ---
 ```
-
-#### Problem
-
-MoneyX's registration controller action takes an optional ```next``` parameter that determines where the user browser is redirected to after registration. This feature was added so the user could be redirect to different versions of the login page, or even the main page of the application, without even modifying the main registration Java code. However, there is no validation that the path passed in is part of the application. In fact, passing in ```next=http%3A%2F%2Fevil.com``` results in a malicious browser redirect!
 
 #### Solution
 

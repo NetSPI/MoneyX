@@ -6,6 +6,13 @@ Insecure Direct Object References are a class of vulnerability where users are a
 
 In order for this problem to be an *insecure* direct object reference, it should allow the attacker to bypass normal authentication methods. For example, a system that stores invoices and allows them to be accessed by ID (```/invoice?id=343243```) would have IDOR vulnerabilities if an attacker could bruteforce ID numbers to view other users' private invoices.
 
+#### Problem
+URL: http://localhost:8080/payment/list-received/1 http://localhost:8080/event/list-member/1
+
+In both the ```EventController``` and ```PaymentController```, there is no verification that the user submitting the request is attempting to view their own information. It is reasonable to assume that payments a user has sent, and bills they have left to pay, are to be kept private. Yet, if you pass a user ID that is not yours in the URL, the application will dutifully reveal that user's information. MoneyX has several other instances of IDOR, all of which follow the same basic insecure pattern.
+
+It's important to note that Spring Security does ensure that users have to be logged in to access either of these controller actions. However, that is not enough to prevent IDOR. Since users can directly access database object information by changing the ```userid``` in the URl, this is still IDOR.
+
 #### Code Snippet
 
 src/main/java/com/nVisium/androidnv/api/controller/PaymentController.java
@@ -31,12 +38,6 @@ src/main/java/com/nVisium/androidnv/api/controller/EventController.java
 		// ...
 	}
 ```
-
-#### Problem
-
-In both the ```EventController``` and ```PaymentController```, there is no verification that the user submitting the request is attempting to view their own information. It is reasonable to assume that payments a user has sent, and bills they have left to pay, are to be kept private. Yet, if you pass a user ID that is not yours in the URL, the application will dutifully reveal that user's information. MoneyX has several other instances of IDOR, all of which follow the same basic insecure pattern.
-
-It's important to note that Spring Security does ensure that users have to be logged in to access either of these controller actions. However, that is not enough to prevent IDOR. Since users can directly access database object information by changing the ```userid``` in the URl, this is still IDOR.
 
 #### Solution
 

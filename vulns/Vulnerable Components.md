@@ -6,8 +6,12 @@ Components with Known Vulnerabilities are libraries that contain published or pu
 
 As developers create more complex applications, they are relying more heavily on 3rd party code in the form of application libraries. Yet, they often pay little attention to the internals or implementation of such libraries. Worse, dependencies often have other dependencies themselves, so it is difficult to even know all the libraries you are using! Keeping a focus on updates for 3rd party code is crucial in preventing your application from being suddenly exploitable.
 
-#### Code Snippet
+#### Problem
+URL: None
 
+For MoneyX, dependencies are specified in the ```build.gradle``` file, used by the Gradle build system. The developer has used versions of each dependency that were up to date at the time of release. However, since the app was developed, new published security issues ([one example here]((https://pivotal.io/security/cve-2015-3192))) have been released to make them out of date.
+
+#### Code Snippet
 build.gradle
 
 ```
@@ -30,10 +34,6 @@ dependencies {
 // ...
 
 ```
-
-#### Problem
-
-For MoneyX, dependencies are specified in the ```build.gradle``` file, used by the Gradle build system. The developer has used versions of each dependency that were up to date at the time of release. However, since the app was developed, new published security issues ([one example here]((https://pivotal.io/security/cve-2015-3192))) have been released to make them out of date.
 
 #### Solution
 

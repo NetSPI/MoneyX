@@ -14,10 +14,6 @@ import org.springframework.security.core.Authentication;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.context.SecurityContextHolder;
 
-
-
-
-import com.nvisium.androidnv.api.model.Friend;
 import com.nvisium.androidnv.api.model.User;
 import com.nvisium.androidnv.api.security.SecurityUtils;
 import com.nvisium.androidnv.api.service.UserService;
@@ -44,9 +40,6 @@ public class UserController {
 	 * Logout is also handled by Spring Session
 	 */
 
-	/*
-	 * Register for an account VULN - Username enumeration
-	 */
 	@RequestMapping(value = "/register", method = { RequestMethod.GET,
 			RequestMethod.POST })
 	public ModelAndView register(
@@ -83,14 +76,11 @@ public class UserController {
 			model.addAttribute("error", "Username already taken!");
 		return new ModelAndView("user/register", "user", new User());
 	}
-	
-	// IDOR: This is vulnerable
-	// TODO: Modify this lookup to make in vulnerable to SQL Injection.
-	
+		
 	@RequestMapping(value = "/profile/{id}", method = RequestMethod.GET)
 	public String getProfile(@PathVariable String id, Model model, RedirectAttributes redirectAttrs) {
 		
-		model.addAttribute("user", userService.loadUserById(Long.getLong(id)));
+		model.addAttribute("user", userService.loadUserById(Long.valueOf(id)));
 		model.addAttribute("id", id);
 		return "user/profile";
 	}
@@ -116,9 +106,6 @@ public class UserController {
 		}
 	}
 
-	/*
-	 * Update the account password VULN - CSRF
-	 */
 	@RequestMapping(value = "/update-password/{oldPassword}/{newPassword}", method = RequestMethod.GET)
 	public String updatePassword(@PathVariable String oldPassword,
 			@PathVariable String newPassword, RedirectAttributes redirectAttrs) {
@@ -134,10 +121,7 @@ public class UserController {
 		return "redirect:/get-settings";
 	}
 
-	/*
-	 * VULN: Insecure defaults, Gets all users with privacy disabled; by
-	 * default, privacy is disabled
-	 */
+
 	@RequestMapping(value = "/get-public-users", method = RequestMethod.GET)
 	public String getPublicUsers(Model model) {
 		
@@ -154,9 +138,6 @@ public class UserController {
 		return "user/public-users";
 	}
 
-	/*
-	 * Get all user settings TODO: Finish me
-	 */
 	@RequestMapping(value = "/get-settings", method = RequestMethod.GET)
 	public String getSettings(Model model) {
 

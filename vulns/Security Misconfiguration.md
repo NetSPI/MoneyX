@@ -6,8 +6,16 @@ Security Misconfiguration refers to insecure settings chosen for any portion of 
 
 Security Misconfiguration issues can occur in the web application itself, the application server, the web server, the host operating system. For this reason, this class of vulnerability can be easy to exploit. Misconfiguration often involves searching for what is missing, rather than what is purposely configured insecurely. It can be also difficult to ensure that all layers of your stack are configured securely, especially across system updates.
 
-#### Code Snippet
+#### Problem
+URL: http://localhost:8080/dashboard, http://locahost:8080/console
 
+In ```SecurityConfiguration```, SpringSecurity has been configured in an extremely insecure manner. CSRF protection, which is covered in another vulnerability, has been completely disabled. The clickjacking protection has also been disabled by ```http.headers().frameOptions().disable()```.
+
+Furthermore, the built-in H2 database console has been left unprotected and does not require system login to access. Since the database console has full access to the database, this is a significant security vulnerability.
+
+In the ```application.properties``` file, the server has been set to bind on any IP address on the system, which could potentially expose it on an unfirewalled network interface. It also uses the default settings for SSL, which leave it completely disabled. Finally, any security headers,  which improve the security of the client browser, have been disabled.
+
+#### Code Snippet
 src/main/java/com/nVisium/androidnv/api/security/SecurityConfiguration.java
 
 ```
@@ -40,14 +48,6 @@ security.headers.frame=false
 security.headers.content-type=false
 # ...
 ```
-
-#### Problem
-
-In ```SecurityConfiguration```, SpringSecurity has been configured in an extremely insecure manner. CSRF protection, which is covered in another vulnerability, has been completely disabled. The clickjacking protection has also been disabled by ```http.headers().frameOptions().disable()```.
-
-Furthermore, the built-in H2 database console has been left unprotected and does not require system login to access. Since the database console has full access to the database, this is a significant security vulnerability.
-
-In the ```application.properties``` file, the server has been set to bind on any IP address on the system, which could potentially expose it on an unfirewalled network interface. It also uses the default settings for SSL, which leave it completely disabled. Finally, any security headers,  which improve the security of the client browser, have been disabled.
 
 #### Solution
 
