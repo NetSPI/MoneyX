@@ -15,13 +15,63 @@ Ensure that sessions are properly stored in cookies on the client, and nowhere e
 Finally, some session implementations make it easy to hijack user sessions through smaller features; "forgot password" or "change password" is a common avenue of attack. These features should be complex enough to prevent attackers from malicious resetting credentials.
 
 #### Code Snippet
-[example of spring storing passwords unencrypted]
+#### Code Snippet
+src/main/java/com/nVisium/androidnv/api/controller/UserController.java
 
 ```
+                if (!userService.doesUserExist(username)) {
+                        userService.addRegularUser(username, password, email, answer,
+                                        firstname, lastname);
+                        redirectAttrs.addFlashAttribute("success",
+                                        "Successfully registered!");
+                        if (next != null) {
+                                return new ModelAndView("redirect:" + next);
+                        } else {
+                                return new ModelAndView("redirect:/login");
+                        }
+                } else
+```
+src/main/java/com/nVisium/androidnv/api/service/impl/UserServiceImpl.java
+
+```
+        public void addRegularUser(String username, String password, String email,
+                        String answer, String firstname, String lastname) {
+                com.nvisium.androidnv.api.model.User user = new com.nvisium.androidnv.api.model.User();
+                user.addAccountInfo(username, password, email, answer, firstname,
+                                lastname);
+                accountRepository.save(user);
+        }
+```
+src/main/java/com/nVisium/androidnv/api/model/User.java
+
+```
+        public void setPassword(String password) {
+                this.password = password;
+        }
+
+        [...]
+
+        public void addAccountInfo(String username, String password, String answer,
+                        String email, String firstname, String lastname) {
+                this.setUsername(username);
+                this.setPassword(password);
+                this.setAnswer(answer);
+                this.setEmail(email);
+                this.setFirstname(firstname);
+                this.setLastname(lastname);
+                this.setAccountNonLocked(true);
+                this.roles = new HashSet<Role>();
+                // create a new user with basic user privileges
+                roles.add(new Role("USER", this));
+                this.setRoles(roles);
+                this.setPrivacyEnabled(false);
+                this.balance = new BigDecimal(0.0);
+        }
+```
+
 ```
 [example of forgot password involving you saying your favorite color]
 
-```
 ```
 view/user/profile.jsp
 
