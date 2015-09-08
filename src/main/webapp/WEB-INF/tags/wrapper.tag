@@ -97,6 +97,11 @@
     </nav>
 
     <div class="container" role="main">
+    <script>
+    if(location.hash){
+        document.write('<div class="alert alert-info alert-dismissible" role="info">'+location.hash+' is not a valid hash tag</div>');
+    }
+    </script>
 
     <c:if test="${not empty param.info}">
     <div class="alert alert-info alert-dismissible" role="danger">
