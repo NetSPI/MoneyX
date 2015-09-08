@@ -55,6 +55,6 @@
         </form:form>
     </div>
 
-    <p class="small">Note: this is an training application, please don't use a real credit card!</p>
+    <p class="small">Note: this is a training application, please don't use a real credit card!</p>
 
 </t:wrapper>
