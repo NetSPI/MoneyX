@@ -22,4 +22,5 @@ public class MvcInitializer extends
 	protected String[] getServletMappings() {
 		return new String[] { "/" };
 	}
+
 }

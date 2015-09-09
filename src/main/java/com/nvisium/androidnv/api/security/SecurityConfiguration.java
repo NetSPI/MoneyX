@@ -36,7 +36,9 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
 				.and().formLogin().loginPage("/login")
 				.defaultSuccessUrl("/dashboard").permitAll().and().logout()
 				.permitAll().and().requestCache()
-				.requestCache(new NullRequestCache()).and().csrf().disable();
+				.requestCache(new NullRequestCache())
+				.and().sessionManagement().sessionFixation().none()
+				.and().csrf().disable();
 
 		http.headers().frameOptions().disable();
 	}
