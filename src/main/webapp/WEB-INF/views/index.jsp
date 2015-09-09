@@ -21,7 +21,7 @@
         </div>
         <div class="col-md-4">
           <h2><span class="glyphicon glyphicon-user" aria-hidden="true"></span> Social Payments</h2>
-          <p>Once you've logged in, we can track any payments you make in real life. Everyone you know will be able to judge you for the purchases and life choies you make.</p>
+          <p>Once you've logged in, we can track any payments you make in real life. Everyone you know will be able to judge you for the purchases and life choices you make.</p>
        	</div>
         <div class="col-md-4">
           <h2><span class="glyphicon glyphicon-menu-hamburger" aria-hidden="true"></span> Easy Withdrawals</h2>
