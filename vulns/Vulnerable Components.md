@@ -6,10 +6,17 @@ Components with Known Vulnerabilities are libraries that contain published or pu
 
 As developers create more complex applications, they are relying more heavily on 3rd party code in the form of application libraries. Yet, they often pay little attention to the internals or implementation of such libraries. Worse, dependencies often have other dependencies themselves, so it is difficult to even know all the libraries you are using! Keeping a focus on updates for 3rd party code is crucial in preventing your application from being suddenly exploitable.
 
+#### Walkthrough
+
+1. Open up the ```build.gradle``` file in the main directory of the application.
+2. Notice that the dependencies section contains version numbers for some key components
+3. Using a CVE search website, such as [CVE Details](http://www.cvedetails.com/), [National Vulnerability Database](https://nvd.nist.gov) or [MITRE's CVE Search](http://www.cve.mitre.org/find/index.html), search for the versions used in the MoneyX application
+4. Two recent vulnerabilities in Spring and Spring Boot include [CVE-2015-3192](https://nvd.nist.gov/nvd.cfm?cvename=CVE-2015-3192) and [CVE-2014-3578](http://www.cvedetails.com/cve/CVE-2014-3578/). Since the components in MoneyX are vulnerable, both could be used to attack the application without having any vulnerabilies in MoneyX code itself
+
 #### Problem
 URL: None
 
-For MoneyX, dependencies are specified in the ```build.gradle``` file, used by the Gradle build system. The developer has used versions of each dependency that were up to date at the time of release. However, since the app was developed, new published security issues ([one example here]((https://pivotal.io/security/cve-2015-3192))) have been released to make them out of date.
+For MoneyX, dependencies are specified in the ```build.gradle``` file, used by the Gradle build system. The developer has used versions of each dependency that were up to date at the time of release. However, since the app was developed, [new published security issues](https://pivotal.io/security/cve-2015-3192) have been released to make them out of date.
 
 #### Code Snippet
 build.gradle
