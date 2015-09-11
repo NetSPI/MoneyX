@@ -13,6 +13,15 @@ URL: http://localhost:8080/register?next=/payment/make-payment
 
 MoneyX's registration controller action takes an optional ```next``` parameter that determines where the user browser is redirected to after registration. This feature was added so the user could be redirect to different versions of the login page, or even the main page of the application, without even modifying the main registration Java code. However, there is no validation that the path passed in is part of the application. In fact, passing in ```next=http%3A%2F%2Fevil.com``` results in a malicious browser redirect!
 
+#### Walkthrough
+1. Click on the Register button.
+2. Add a next parameter to the URL by copy and pasting ```?next=http%3A%2F%2Fgoogle.com``` at the end.
+3. Hit return/enter in the URL bar to reload the page with the value loaded in the next parameter.
+4. Enter values in each of the form fields as appropriate (make something up).
+5. Click the Register button.
+
+Note that the application successfully registers and then redirects your browser to google.com.
+
 #### Code Snippet
 src/main/java/com/nVisium/androidnv/api/controller/UserController.java
 

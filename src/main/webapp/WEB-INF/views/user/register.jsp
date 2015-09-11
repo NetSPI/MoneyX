@@ -38,6 +38,8 @@
 
         <label for="lastname" class="sr-only">Last Name</label>
         <input type="text" id="lastname" name="lastname" class="form-control form-bottom" placeholder="Last Name" required>
+        
+        <input type="hidden" id="next" name="next" value="${param.next}">
 
         <button class="btn btn-lg btn-primary btn-block" type="submit">Register</button>
     </form:form>
