@@ -50,7 +50,7 @@
             	<ul class="dropdown-menu">
             		<li><a href="/event/list-owner/<sec:authentication property="principal.user.id" />">My Events</a></li>
             		<li><a href="/event/list-member/<sec:authentication property="principal.user.id" />">Member Events</a></li>
-            		<li><a href="/event/add">Create Events</a></li>
+            		<li><a href="/event/add">Create Event</a></li>
             	</ul>
             </li>
             <li><a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">Payments<span class="caret"></span></a>
