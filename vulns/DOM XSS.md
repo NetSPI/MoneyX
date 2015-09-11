@@ -13,6 +13,14 @@ URL: http://localhost:8080/dashboard#test
 
 MoneyX intends to use JavaScript to search for specific URL hash terms within each page and adds an error message to DOM when it cannot be found. However, as seen with reflected and stored XSS, the application is not adequately protected! Although there is no indication in each rendered page that the outputs are "insecure", use of the ```document.write``` JavaScript function in combination with the ```location.hash``` user-controlled variable does not perform any encoding by default. Pop-ups and other JavaScript functions may be called using the same techniques as within the other XSS forms.
 
+#### Walkthrough
+1. Open up MoneyX using the SauceLabs Firefox Browser
+2. Sign in as 'user' with password 'user123'
+3. Click on Events -> My Events
+4. Append ```#test<script>alert('XSS')``` to the end of the URL.
+4. Hit enter, click the reload button for the browser and an alert box pops up with 'XSS' in it.
+5. Close the alert box.
+
 #### Code Snippet
 src/main/webapp/WEB-INF/tags/wrapper.tag
 
