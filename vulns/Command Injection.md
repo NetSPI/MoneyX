@@ -11,6 +11,11 @@ URL: http://localhost:8080/test.jsp
 
 MoneyX contains a test JSP file within the views directory that was ostensibly used during initial setup as a temporary script or development aid to evaluate spring parameters. Since this parameter is user-controllable, it is possible to pass in various commands and expressions to be executed by the application.
 
+#### Walkthrough
+
+1. Open up the application directory, and navigate to the views folder (```src/main/webapp/WEB-INF/views```). Notice that there is a ```test.jsp``` file in that folder that appears to be debug functionality.
+2. Attempt to access the path ```/test?test=@environment``` on the system. The output appears to be code injection, since we can access the environment object!
+3. Navigate to ```/test?test=@environment.getProperty(%27user%27)```. We can leverage this vulnerability to access the current logged in user. Since we have command execution in the JSP template, we can use it to execute arbitrary code on the server and return it to the client.
 
 #### Code Snippet
 src/main/java/webapp/WEB-INF/views/test.jsp
