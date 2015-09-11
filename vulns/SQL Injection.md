@@ -33,6 +33,14 @@ MoneyX's has three difference instances of raw SQL queries in its ```PaymentCont
 
 In all three cases, the code does not adequately protect against SQL injection attacks. The query is made by simply concatenating user input before it is send to the database, and there are no assurances that the user really inputs an ID or dollar amount like they are supposed to.
 
+#### Walkthrough
+
+1. Log into the system using existing user credentials
+2. Once you are in the system, navigate to your sent-payments page (path: ```/list-sent/<your user id>```).
+3. Notice that the sent-payments page appears to use the ID in the URL to determine which user payments to retrieve. Try replacing the ID with a single quote (').
+4. The system throws an error, meaning it may be vulnerable to SQL Injection! Go back to the real sent-payments page, and then replace the ID in the URL with the string "**1 OR 1=1**".
+5. The page now returns all payments currently in the system, since 1 is always equal to 1. The full query has become ```SELECT * FROM Payments p WHERE p.sender = 1 OR 1=1```.
+
 #### Code Snippet
 src/main/java/com/nVisium/androidnv/api/controller/PaymentController.java
 
