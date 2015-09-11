@@ -16,6 +16,12 @@ URL: http://localhost:8080/dashboard
 
 MoneyX uses the JSP templating language to render its frontend views. However, throughout almost the entire application it does not adequately protect against XSS! Although there is no indication in the templates that the outputs are "insecure", simplying using the ```${variable}``` syntax does not perform any encoding by default. In the "wrapper.tag" template above, the value of the ```info``` parameter is printed out in raw format; if an attacker passes in a value that contains a script tag, it would be output to the page directly and treated as HTML. Similarly, the "profile" JSP shows the information being pulled from the URL and reflected back out to the user in a raw format.
 
+#### Walkthrough
+1. Open up MoneyX using the SauceLabs Firefox Browser
+2. Sign in as 'user' with password 'user123'
+3. Change the URL on the dashboard page and append ```?info=test<script>alert('XSS')</script>``` to the end 
+4. Hit enter and an alert box pops up with 'XSS' in it.
+5. Close the alert box.
 
 #### Code Snippet
 src/main/webapp/WEB-INF/tags/wrapper.tag

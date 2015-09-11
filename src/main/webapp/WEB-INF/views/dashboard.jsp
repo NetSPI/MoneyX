@@ -45,7 +45,7 @@
         </tr>
         <c:forEach var="o" items="${owned}">
         <tr>
-        <td>${encoder:forHtml(o.name)}</td>
+        <td>${o.name}</td>
         <td>$${o.amount}</td>
         <td>
         	<c:forEach var="user" items="${users[o]}">
