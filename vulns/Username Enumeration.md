@@ -11,6 +11,12 @@ URL: http://localhost:8080/login
 
 The MoneyX developers attempted to make their login page more user friendly by specifying exactly what occurs when the user enters the incorrect information. If the user's password is incorrect, the application will display the string "Bad Credentials" on the page. However, if the username is incorrect, the application will not display the string.
 
+#### Walkthrough
+
+1. Navigate to the login page (```/login```)
+2. Attempt to sign in with credentials ```Username: notreal, Password: notreal```. Notice the system does not indicate whether the username or password is incorrect
+3. Attempt to sign in with credentials ```Username: kyle, Password: notreal```. The system now displays "Bad credentials" in parenthesis. Since the message displayed is different for username and password, we are able to enumerate whether a username exists by checking for the string "Bad credentials".
+
 #### Code Snippet
 src/main/java/com/nVisium/androidnv/api/MvcConfig.java
 
