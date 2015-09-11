@@ -8,6 +8,8 @@ buildscript {
     dependencies {
         classpath("org.springframework.boot:spring-boot-gradle-plugin:${springBootVersion}") 
         classpath("io.spring.gradle:dependency-management-plugin:0.5.2.RELEASE")
+	classpath("org.owasp.encoder:encoder:1.2")
+	classpath("org.owasp.encoder:encoder-jsp:1.2")
     }
 }
 
@@ -39,6 +41,8 @@ dependencies {
     compile("org.springframework.session:spring-session-data-redis:1.0.1.RELEASE")
     compile("javax.servlet:jstl:1.2")
     compile("com.h2database:h2")
+    compile("org.owasp.encoder:encoder:1.2")
+    compile("org.owasp.encoder:encoder-jsp:1.2")
     runtime("mysql:mysql-connector-java")
     testCompile("org.springframework.boot:spring-boot-starter-test")
     runtime("org.apache.tomcat.embed:tomcat-embed-jasper")
