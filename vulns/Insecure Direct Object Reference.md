@@ -13,6 +13,12 @@ In both the ```EventController``` and ```PaymentController```, there is no verif
 
 It's important to note that Spring Security does ensure that users have to be logged in to access either of these controller actions. However, that is not enough to prevent IDOR. Since users can directly access database object information by changing the ```userid``` in the URl, this is still IDOR.
 
+#### Walkthrough
+
+1. Once you are logged in, navigate to your own sent-payments page (for user ```kyle```, this page is at ```/payment/list-sent/3```).
+2. Notice the URL contains your user ID (```3``` for the ```kyle``` account). Try changing to 2.
+3. You can now see all the events for the user with ID 2! Payments you have sent are meant to be private, so this is an example of IDOR. There are no links to other users' sent payments page, but you are still able to access them by modifying URL parameters.
+
 #### Code Snippet
 
 src/main/java/com/nVisium/androidnv/api/controller/PaymentController.java
