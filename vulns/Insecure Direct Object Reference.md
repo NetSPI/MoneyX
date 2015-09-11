@@ -15,8 +15,8 @@ It's important to note that Spring Security does ensure that users have to be lo
 
 #### Walkthrough
 
-1. Once you are logged in, navigate to your own sent-payments page (for user ```kyle```, this page is at ```/payment/list-sent/3```).
-2. Notice the URL contains your user ID (```3``` for the ```kyle``` account). Try changing to 2.
+1. Once you are logged in, navigate to your own sent-payments page (for user ```user```, this page is at ```/payment/list-sent/3```).
+2. Notice the URL contains your user ID (```3``` for the ```user``` account). Try changing to 2.
 3. You can now see all the events for the user with ID 2! Payments you have sent are meant to be private, so this is an example of IDOR. There are no links to other users' sent payments page, but you are still able to access them by modifying URL parameters.
 
 #### Code Snippet
