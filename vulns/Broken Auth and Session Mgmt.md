@@ -24,7 +24,21 @@ Sessions in MoneyX are valid for a long period of time, and stay valid even when
 
 Finally, the developers of MoneyX have implemented a custom, insecure "forgot password" feature for users who cannot remember their passwords. Rather than requiring a user to verify their email address, they simply have to enter their favorite color that they chose on registration. Unfortunately, a large number of users will answer this question with a small subset of colors! An attacker could easily bruteforce common colors (red, blue, green, yellow, black, white, etc) and log into a large percentage of user accounts.
 
+#### Walkthrough
 
+###### Forgot Password
+
+1. Make sure you're logged out of the system, and then click on the "Forgot Password" link on the login page (path: ```/forgot-password```).
+2. Choose the user account you want to target (could use username enumeration to determine which accounts exist!)
+3. The page asks for the favorite color selected by the user. Most users will use a color from a small subset of colors (red, green, blue, yellow, pink, brown, orange, white, black, etc). Try all the colors until one matches.
+4. Once you have the user's favorite color, the password can be set to any value, and you will have full access to the user account.
+
+###### Session Fixation
+
+1. Make sure you're logged out of the system, and then navigate to the login page (```/login```)
+2. Note that MoneyX has already assigned a tracking cookie to your computer, even before you have logged in. You can view this cookie in your browser's developer console (Chrome: ```Options -> More Tools -> Developer Tools```, Firefox: ```Tools -> Web Developer -> Network```). Select the request corresponding to the login page, and you can see the value of the cookie as one of the HTTP headers.
+3. Log into the application, using an existing user account.
+4. After you have logged in, check the value of the cookie. The value has not changed. This means if an attacker were to steal your session cookie, even if you were not logged into the website, they would have full access to your account whenever you DID log in. Therefore, MoneyX is vulnerable to session fixation!
 
 #### Code Snippet
 (SQL Query returning raw passwords from database)
