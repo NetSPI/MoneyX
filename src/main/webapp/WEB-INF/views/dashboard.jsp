@@ -25,7 +25,7 @@
         </tr>
         <c:forEach var="event" items="${events}">
         <tr>
-	        <td><c:out value="${event.value.name}"/></td>
+	        <td>${event.value.name}</td>
 	        <td><a href="/payment/make-payment?event=${event.value.id}">$<c:out value="${event.key.amount}"/></a></td>
 	        <td>${users[event.value][0].username}</td>
         </tr>
@@ -44,8 +44,8 @@
         </tr>
         <c:forEach var="o" items="${owned}">
         <tr>
-        <td><c:out value="${o.name}"/></td>
-        <td><c:out value="${o.amount}"/></td>
+        <td>${o.name}</td>
+        <td>$${o.amount}</td>
         <td>
         	<c:forEach var="user" items="${users[o]}">
 	        	<c:out value="${user.username}"/>
@@ -74,9 +74,9 @@
         </tr>
         <c:forEach var="s" items="${sent}">
         <tr>
-	        <td><c:out value="${s.event.name}"/></td>
-	        <td>$<c:out value="${s.amount}"/></td>
-	        <td><c:out value="${s.receiver.username}"/></td>
+	        <td>${s.event.name}</td>
+	        <td>$${s.amount}</td>
+	        <td>${s.receiver.username}</td>
         </tr>
         </c:forEach>
     </table>
@@ -92,9 +92,9 @@
         </tr>
         <c:forEach var="r" items="${received}">
         <tr>
-	        <td><c:out value="${r.event.name}"/></td>
-	        <td>$<c:out value="${r.amount}"/></td>
-	        <td><c:out value="${r.sender.username}"/></td>
+	        <td>${r.event.name}</td>
+	        <td>$${r.amount}</td>
+	        <td>${r.sender.username}"</td>
         </tr>
         </c:forEach>
     </table>
