@@ -1,6 +1,7 @@
 <%@ page contentType="text/html" pageEncoding="UTF-8" %>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
 <%@ taglib prefix="t" tagdir="/WEB-INF/tags" %>
+<%@ taglib prefix="encoder" uri="https://www.owasp.org/index.php/OWASP_Java_Encoder_Project" %>
 
 <t:wrapper>
 	<div class="col-md-12">
@@ -21,7 +22,7 @@
         <tr>
             <th>Event</th>
             <th>Pay</th>
-            <th>To</th>
+            <th>From</th>
         </tr>
         <c:forEach var="event" items="${events}">
         <tr>
@@ -40,11 +41,11 @@
         <tr>
             <th>Event</th>
             <th>Total</th>
-            <th>From</th>
+            <th>To</th>
         </tr>
         <c:forEach var="o" items="${owned}">
         <tr>
-        <td>${o.name}</td>
+        <td>${encoder:forHtml(o.name)}</td>
         <td>$${o.amount}</td>
         <td>
         	<c:forEach var="user" items="${users[o]}">
