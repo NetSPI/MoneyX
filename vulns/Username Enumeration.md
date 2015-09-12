@@ -15,7 +15,7 @@ The MoneyX developers attempted to make their login page more user friendly by s
 
 1. Navigate to the login page (```/login```)
 2. Attempt to sign in with credentials ```Username: notreal, Password: notreal```. Notice the system does not indicate whether the username or password is incorrect
-3. Attempt to sign in with credentials ```Username: kyle, Password: notreal```. The system now displays "Bad credentials" in parenthesis. Since the message displayed is different for username and password, we are able to enumerate whether a username exists by checking for the string "Bad credentials".
+3. Attempt to sign in with credentials ```Username: user, Password: notreal```. The system now displays "Bad credentials" in parenthesis. Since the message displayed is different for username and password, we are able to enumerate whether a username exists by checking for the string "Bad credentials".
 
 #### Code Snippet
 src/main/java/com/nVisium/androidnv/api/MvcConfig.java
@@ -55,3 +55,20 @@ Username Enumeration is relatively simple to protect against; simply ensure that
 ![Response message does not leak information](https://i.imgur.com/NwO4dOg.png)
 
 If you use a password hash that is purposely slow, such as bcrypt/scrypt/pbkdf2, it is important to ensure that the algorithm is still run even when a user is not found. When a login is checked and the username does not exist, you should hashing a random string so the difference in response time will not leak information that could be used to enumerate users.
+
+#### Solution Code 
+src/main/webapp/WEB-INF/views/user/login.jsp
+Lines 7-16 - Remove the Exception message displayed to the user.
+```
+	<c:if test="${param.error != null}">
+		<div class="alert alert-danger alert-dismissible" role="danger">
+			<button type="button" class="close" data-dismiss="danger"
+				aria-label="Close">
+				<span aria-hidden="true">&times;</span>
+			</button>
+			<strong>Error:</strong> Invalid username and/or password
+			<br />
+		</div>
+	</c:if>
+```
+
