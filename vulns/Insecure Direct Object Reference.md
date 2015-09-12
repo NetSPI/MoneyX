@@ -47,4 +47,19 @@ src/main/java/com/nVisium/androidnv/api/controller/EventController.java
 
 #### Solution
 
-In both controllers, rather than prompting the user for a ```userid``` from the URL, simply use the current user's ID. In Spring Security, this can be obtained with ```SecurityContextHolder.getContext().getAuthentication().getId()```. Thus, the user would only be able to access their own bills and sent payments.
+In both controllers, rather than prompting the user for a ```userid``` from the URL, simply use the current user's ID. In Spring Security, this can be obtained with ```SecurityContextHolder.getContext().getAuthentication().getId()```. We've created a shortcut in MoneyX to retrieve the logged in user ID through ```security.getCurrentUserId()```. Thus, the user would only be able to access their own bills and sent payments.
+
+#### Solution Code - Modify the event controller to only allow return events for the current user.
+src/main/java/com/nVisium/androidnv/api/controller/EventController.java
+Lines 63-67
+
+```
+	@RequestMapping(value = "/list-member/{user}", method = RequestMethod.GET)
+	public String listEventMembership(
+			@PathVariable("user") Long user,
+			Model model) {
+		java.util.List<EventMembership> events_m = eventService.getEventsByMembership(security.getCurrentUserId());
+		// ...
+	}
+```
+
