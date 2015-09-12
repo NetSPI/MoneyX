@@ -96,10 +96,10 @@
       </div>
     </nav>
 
-    <div class="container" role="main">
+    <div class="container" role="main" id="main">
     <script>
     if(location.hash){
-        document.write('<div class="alert alert-info alert-dismissible" role="info">'+location.hash+' is not a valid hash tag</div>');
+    	document.write('<div class="alert alert-info alert-dismissible" role="info">'+location.hash+' is not a valid hash tag</div>');
     }
     </script>
 

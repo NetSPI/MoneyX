@@ -23,9 +23,9 @@ MoneyX intends to use JavaScript to search for specific URL hash terms within ea
 
 #### Code Snippet
 src/main/webapp/WEB-INF/tags/wrapper.tag
-
+Lines 99-104
 ```
-   <div class="container" role="main">
+   <div class="container" role="main" id="main">
     <script>
     if(location.hash){
         document.write('<div class="alert alert-info alert-dismissible" role="info">'+location.hash+' is not a valid hash tag</div>');
@@ -37,5 +37,19 @@ src/main/webapp/WEB-INF/tags/wrapper.tag
 
 #### Solution
 
-DOM-XSS requires specific knowledge of the user-controlled JavaScript parameters, in addition to those functions that write directly to the DOM without any protections against unsafe content. First of all, always treat untrusted data as displayable text. Use ```element.textContent``` to instruct the browser how the data should be treated. Further, use ```document.createElement``` instead of ```document.write``` when manipulating the DOM directly. Finally, when outputting JavaScript variables to a dynamically-generated JSP page, ensure you use the [JSTL](https://jstl.java.net/) library's ```<c:out>``` tag to properly escape for XML/HTML.
+DOM-XSS requires specific knowledge of the user-controlled JavaScript parameters, in addition to those functions that write directly to the DOM without any protections against unsafe content. First of all, always treat untrusted data as displayable text. Use ```element.textContent``` to instruct the browser how the data should be treated. Further, use ```document.createElement``` instead of ```document.write``` when manipulating the DOM directly. Finally, when outputting JavaScript variables to a dynamically-generated JSP page, ensure you use the [JSTL](https://jstl.java.net/) library's ```<c:out>``` tag or OWASP's Java Encoder ```${encoder.forHtml(param.test)}``` to properly escape for XML/HTML.
 
+### Solution Code
+wrapper.tag
+Lines 99-107
+```
+    <div class="container" role="main" id="main">
+    <script>
+    if(location.hash){
+    	var d = document.createElement('div');
+    	d.className="alert alert-info alert-dismissable";
+    	d.textContent=location.hash+' is not a valid hash tag';
+    	document.getElementById('main').appendChild(d);
+    }
+    </script>
+```
