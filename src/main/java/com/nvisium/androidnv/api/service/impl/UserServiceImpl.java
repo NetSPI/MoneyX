@@ -97,6 +97,11 @@ public class UserServiceImpl implements UserService {
 	}
 	
 	@Transactional
+	public User loadUser(String username) {
+		return accountRepository.getUserModelByUsername(username);
+	}
+	
+	@Transactional
 	public void updateUser(String username, String firstname, String lastname, String email) {
 		accountRepository.updateUserProfile(username,firstname,lastname,email);
 	}

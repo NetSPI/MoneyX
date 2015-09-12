@@ -108,3 +108,52 @@ Finally, you should avoid using any "forgot password" that does not rely on user
 Even worse are questions that have only a small set of legitimate answers (including the one in MoneyX). Most users will answer the questions truthfully, since they will usually forget their answer when they need it otherwise.
 
 Unfortunately, Spring Security does not come with built-in functionality to reset passwords via email. Instead, modify MoneyX to store user email instead of favorite color. When users pass their email in on the forgot email form, generate a long (30+ character) reset token with [SecureRandom](https://docs.oracle.com/javase/8/docs/api/java/security/SecureRandom.html) and email it to them (Spring has a [built in email library](http://docs.spring.io/spring-framework/docs/current/spring-framework-reference/html/mail.html)). Once they click on that link, take them to a page where they are able to reset their password. Ensure that the link stops functioning after their password is reset by clearing it from the user table in the database!
+
+
+#### Solution Code - Add User Email to forgot password form
+src/main/webapp/WEB-INF/views/user/forgot-password.jsp
+Lines 17-22
+```
+ 		<div class="form-group">
+        	<input type="text" id="username" name="username" class="form-control" placeholder="Username" required autofocus>
+        	<input type="text" id="answer" name="answer" class="form-control" placeholder="Favorite Color" required autofocus>
+        	<input type="text" id="email" name="email" class="form-control" placeholder="Email Address" required>
+        	<input type="password" id="password" name="password" class="form-control" placeholder="New Password" required>
+		</div>
+```
+src/main/java/com/nvisium/androidnv/api/controller/UserController.java
+Lines 189-220
+```
+	@RequestMapping(value = "/forgot-password", method = { RequestMethod.GET,
+			RequestMethod.POST })
+	public String forgotPassword(
+			@RequestParam(value = "username", required = false) String username,
+			@RequestParam(value = "answer", required = false) String answer,
+			@RequestParam(value = "password", required = false) String password,
+			@RequestParam(value = "email", required = false) String email, // NEW
+			Model model, RedirectAttributes redirectAttrs) {
+
+		/*
+		 * If we need anything, let's just take the user to the forgot password
+		 * page
+		 */
+		if (username == null || password == null || answer == null || email == null) { // Added email check
+			return "user/forgot-password";
+		}
+
+		/* Validate the username, email, and answer */
+		if (userService.doesUserExist(username) ) {
+			User u = userService.loadUser(username); // Load user details
+			if ( u.getEmail().equals(email) && userService.isAnswerValid(username, answer)) { //check if email lines up
+				userService.updatePasswordByUsername(username, password);
+				redirectAttrs.addFlashAttribute("success","Password successfully updated!");
+				return "redirect:/login";
+			
+		}
+
+		} else {
+			model.addAttribute("error", "true");
+		}
+		return "user/forgot-password";
+	}
+```

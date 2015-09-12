@@ -13,6 +13,8 @@ public interface UserService extends UserDetailsService {
 	public UserDetails loadUserByUsername(String username);
 	
 	public User loadUserById(Long id);
+	
+	public User loadUser(String username);
 
 	public void addRegularUser(String username, String password, String email,
 			String answer, String firstname, String lastname);
