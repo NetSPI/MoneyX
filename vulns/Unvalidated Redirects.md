@@ -24,7 +24,30 @@ Note that the application successfully registers and then redirects your browser
 
 #### Code Snippet
 src/main/java/com/nVisium/androidnv/api/controller/UserController.java
+Lines 65-74
+```
+		if (!userService.doesUserExist(username)) {
+			userService.addRegularUser(username, password, email, answer,
+					firstname, lastname);
+			redirectAttrs.addFlashAttribute("success",
+					"Successfully registered!");
+			if (next != null) {
+				return new ModelAndView("redirect:" + next);
+			} else {
+				return new ModelAndView("redirect:/login");
+			}
+		}
+```
 
+#### Solution
+
+The optimal solution for preventing unvalidated redirect attacks is to require URLs to be passed in as controller and action pairs (ex: ```(user, login)```) rather than a URL. That way, the value cannot be manipulated to point to another website. You could also do a simple regex or string search for "http://", but a dedicated attacker may find ways around this. A final absolute option is to validate that the URL is a relative URL that contains one of your website domains. The general Java [URL](https://docs.oracle.com/javase/8/docs/api/java/net/URL.html) class can be used to validate different parts of the value, whether relative or absolute.
+
+It may be worth allowing remote websites to be accessed, but putting up a redirect landing page informing users they will be accessing untrusted resources. This will inform the user that they may possibly be exposing themselves to attack.
+
+#### Solution Code - Implement a simple http:// regex
+src/main/java/com/nVisium/androidnv/api/controller/UserController.java
+Lines 65-74
 ```
 // ---
 
@@ -32,17 +55,10 @@ userService.addRegularUser(username, password, email, answer,
 		firstname, lastname);
 redirectAttrs.addFlashAttribute("success",
 		"Successfully registered!");
-if (next != null) {
+if (next != null && !next.startsWith("http://")) {
 	return new ModelAndView("redirect:" + next);
 } else {
 	return new ModelAndView("redirect:/login");
 }
 
 // ---
-```
-
-#### Solution
-
-The optimal solution for preventing unvalidated redirect attacks is to require URLs to be passed in as controller and action pairs (ex: ```(user, login)```) rather than a URL. That way, the value cannot be manipulated to point to another website. Another option is to validate that the URL is a relative URL that contains one of your website domains. The general Java [URL](https://docs.oracle.com/javase/8/docs/api/java/net/URL.html) class can be used to validate different parts of the value, whether relative or absolute.
-
-It may be worth allowing remote websites to be accessed, but putting up a redirect landing page informing users they will be accessing untrusted resources. This will inform the user that they may possibly be exposing themselves to attack.
