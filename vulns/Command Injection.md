@@ -30,7 +30,7 @@ src/main/java/com/nvisium/androidnv/api/controller/DashboardController.java
 ```
 	@RequestMapping(value = "/test", method = RequestMethod.GET)
 	public String test(
-			@RequestParam(required = false, value = "@environment.getProperty('user')") String test) {
+			@RequestParam(required = false, value = "test") String test) {
 		return "test";
 	}
 ```
@@ -40,3 +40,52 @@ src/main/java/com/nvisium/androidnv/api/controller/DashboardController.java
 The main solution for dealing with command injection attacks is to remove any evaluation or passing of user-controlled parameters back to command interpreters. This functionality very rarely needs user-input, but if it does, input validation must be performed to eliminate control characters that give an attacker freeform access to commands and expressions. The most common way to do this is by building a regular expression that validates the user-provided string before being concatanated to the command expression.
 
 In the case of MoneyX, removal of the test.jsp page would be top priority. If user input is required for the command parameters, implement a regular expression to limit what data can be passed into the expression by a user.
+
+#### Solution Code #1
+src/main/java/com/nvisium/androidnv/api/controller/DashboardController.java - removal of ```/test``` mapping.
+Lines 71-75:
+```
+        // @RequestMapping(value = "/test", method = RequestMethod.GET)
+        // public String test(
+                        // @RequestParam(required = false, value = "test") String test) {
+                // return "test";
+        // }
+```
+#### Solution Code #2
+src/main/java/com/nvisium/androidnv/api/controller/DashboardController.java - Regular Expression
+Lines 6-7: Add regular expression imports
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
+
+Lines 73-88: Add a regex so that the user property is the only user environment property that can be retrieved.
+```
+	@RequestMapping(value = "/test", method = RequestMethod.GET)
+	public String test(
+			@RequestParam(required = false, value = "test") String test,
+			Model model) {
+		
+		String pattern = "^user$";
+        	Pattern r = Pattern.compile(pattern);
+        	Matcher m = r.matcher(test);
+        
+        	if (m.find()) {
+        		model.addAttribute("expression","@environment.getProperty('user')");
+        		return "test";
+        	} else {
+        		return "redirect:index";
+        	}
+	}
+```
+src/main/java/webapp/WEB-INF/views/test.jsp
+Lines 6-7 Old
+```
+<spring:eval expression="${param.test}" var="test" />
+<c:out value="${test}" />
+```
+Lines 6-7 New
+```
+<spring:eval expression="${expression}" var="test" />
+<c:out value="${test}" />
+```
+
+Attempt to access the @environment variable. You will be directed to the index or login page of MoneyX.

@@ -3,5 +3,5 @@
 <%@ taglib prefix="t" tagdir="/WEB-INF/tags"%>
 <%@ taglib prefix="spring" uri="http://www.springframework.org/tags"%>
 
-<spring:eval expression="${param.test }" var="test" />
+<spring:eval expression="${param.test}" var="test" />
 <c:out value="${test}" />

@@ -70,7 +70,8 @@ public class DashboardController {
 
 	@RequestMapping(value = "/test", method = RequestMethod.GET)
 	public String test(
-			@RequestParam(required = false, value = "@environment.getProperty('user')") String test) {
-		return "test";
+			@RequestParam(required = false, value = "test") String test,
+			Model model) {
+             	return "test";
 	}
 }
