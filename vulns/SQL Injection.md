@@ -79,7 +79,7 @@ public String listSentPayments(
 	// ---
 ```
 src/main/java/com/nVisium/androidnv/api/controller/PaymentController.java
-
+Lines 60-68
 ```
 @RequestMapping(value = "/list-received/{id}", method = RequestMethod.GET)
 public String listReceivedPayments(
@@ -129,3 +129,18 @@ public List<Payment> findPaymentsByReceiver(User receiver);
 With Hibernate, calling these functions will separate out the information needed for accessing the data from the receiver or sender information itself. Even if the value supplied by the user contains malicious SQL, it will not be executed because it is treated like data! Using parameterized queries can also help make your code more organized, because it separates out the query from the data passed to the query.
 
 Prepared/Stored Statements are similar to parameterized queries, but the query is sent to the database before it is executed, containing placeholders where input will go. The database then executes it with the data it receives. Prepared Statements also prevent SQL injection, but move the solution to the database itself rather than the application.
+
+#### Solution Code
+src/main/java/com/nVisium/androidnv/api/controller/PaymentController.java
+Lines 60-68 - Modify the string concatenation in the Payment Controller to use a parameterized statement
+```
+@RequestMapping(value = "/list-received/{id}", method = RequestMethod.GET)
+public String listReceivedPayments(
+		@PathVariable String id,
+		Model model) {
+	
+	Query q = em.createNativeQuery("select * from Payments p where p.receiver = ?1", Payment.class);
+	q.setParameter(1, id);
+	@SuppressWarnings("unchecked")
+	List<Payment> payments = q.getResultList();
+```

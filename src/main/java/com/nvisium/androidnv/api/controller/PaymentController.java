@@ -8,9 +8,9 @@ import java.util.Map;
 import javax.persistence.EntityManager;
 import javax.persistence.EntityTransaction;
 import javax.persistence.PersistenceContext;
+import javax.persistence.Query;
 import javax.transaction.Transactional;
 
-import org.hibernate.Query;
 import org.hibernate.SessionFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.orm.hibernate4.SessionFactoryUtils;
@@ -62,11 +62,11 @@ public class PaymentController {
 			@PathVariable String id,
 			Model model) {
 		
-		//List<Payment> payments = paymentService.getReceivedPayments(userService.loadUserById(id));
 		@SuppressWarnings("unchecked")
-		List<Payment> payments = 
+		List<Payment> payments = 				
 				em.createNativeQuery("select * from Payments p where p.receiver = " + id, Payment.class)
 				.getResultList();
+				
 
 		
 		if (payments.size() == 0) {
