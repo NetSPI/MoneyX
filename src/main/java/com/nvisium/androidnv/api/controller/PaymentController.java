@@ -62,10 +62,9 @@ public class PaymentController {
 			@PathVariable String id,
 			Model model) {
 		
+		Query q = em.createNativeQuery("select * from Payments p where p.receiver = " + id, Payment.class);
 		@SuppressWarnings("unchecked")
-		List<Payment> payments = 				
-				em.createNativeQuery("select * from Payments p where p.receiver = " + id, Payment.class)
-				.getResultList();
+		List<Payment> payments = q.getResultList();
 				
 
 		
@@ -81,7 +80,7 @@ public class PaymentController {
 	 */
 	@RequestMapping(value = "/list-sent/{id}", method = RequestMethod.GET)
 	public String listSentPayments(
-			@PathVariable String id,
+			@PathVariable Integer id,
 			Model model) {
 		
 		// List<Payment> payments = paymentService.getSentPayments(userService.loadUserById(id));

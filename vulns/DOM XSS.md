@@ -48,7 +48,7 @@ Lines 99-107
     if(location.hash){
     	var d = document.createElement('div');
     	d.className="alert alert-info alert-dismissable";
-    	d.textContent=location.hash+' is not a valid hash tag';
+    	d.innerHtml=location.hash+' is not a valid hash tag';
     	document.getElementById('main').appendChild(d);
     }
     </script>

@@ -10,6 +10,7 @@ buildscript {
         classpath("io.spring.gradle:dependency-management-plugin:0.5.2.RELEASE")
 	classpath("org.owasp.encoder:encoder:1.2")
 	classpath("org.owasp.encoder:encoder-jsp:1.2")
+	classpath("org.owasp.esapi:esapi:2.0.1")
     }
 }
 
@@ -43,6 +44,7 @@ dependencies {
     compile("com.h2database:h2")
     compile("org.owasp.encoder:encoder:1.2")
     compile("org.owasp.encoder:encoder-jsp:1.2")
+    compile("org.owasp.esapi:esapi:2.0.1")
     runtime("mysql:mysql-connector-java")
     testCompile("org.springframework.boot:spring-boot-starter-test")
     runtime("org.apache.tomcat.embed:tomcat-embed-jasper")

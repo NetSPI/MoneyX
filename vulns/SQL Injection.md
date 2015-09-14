@@ -136,11 +136,14 @@ Lines 60-68 - Modify the string concatenation in the Payment Controller to use a
 ```
 @RequestMapping(value = "/list-received/{id}", method = RequestMethod.GET)
 public String listReceivedPayments(
-		@PathVariable String id,
+		@PathVariable Integer id,
 		Model model) {
 	
-	Query q = em.createNativeQuery("select * from Payments p where p.receiver = ?1", Payment.class);
-	q.setParameter(1, id);
+	//List<Payment> payments = paymentService.getReceivedPayments(userService.loadUserById(id));
 	@SuppressWarnings("unchecked")
-	List<Payment> payments = q.getResultList();
+	List<Payment> payments = 
+			em.createNativeQuery("select * from Payments p where p.receiver = " + id, Payment.class)
+			.getResultList();
+			
+	// ---
 ```
