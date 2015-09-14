@@ -14,7 +14,7 @@ MoneyX - an intentionally vulnerable payment application
 Quick Start (Cloud9)
 ----
 1. ```gradle build run```
-2. Login as kyle : kyle123
+2. Login as user : user123
 
 Setup
 ----
@@ -27,6 +27,5 @@ Setup
 Credentials
 ----
 MoneyX has a few preloaded credentials for use. Others are available as well.
-1. kyle - kyle123
-2. cyrus - cyrus123
-3. test - test
+1. user : user123
+2. test : test
