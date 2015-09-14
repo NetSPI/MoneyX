@@ -2,3 +2,4 @@
 .gradle
 bin/
 dump.rdb
+.DS_Store
