@@ -12,7 +12,7 @@ URL: http://localhost:8080/payment/make-payment?event=2&amount=10.00
 In MoneyX, the ```/make-payment``` controller action accepts either a GET or a POST request. It makes no attempt to validate that the user has the proper authentication to make the request. Since the application was also configured in ```SecurityConfiguration``` to disable Spring Security's default CSRF protection, any attacker who forces an unsuspecting user's browser to navigate to ```/make-payment``` can initiate a transfer for an existing event!
 
 ### Walkthrough
-1. Create a HTML page with the code below
+1. Create an HTML page with the code below
 2. Log into the app using the credentials user:user123 
 3. Load the page created in step 1
 4. The page will load with the new transaction created at the bottom of the page
