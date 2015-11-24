@@ -28,7 +28,7 @@ s.b.c.e.t.TomcatEmbeddedServletContainer : Tomcat started on port(s): 8080 (http
 c.n.a.api.AndroidNvApiApplication        : Started AndroidNvApiApplication in 4.659 seconds (JVM running for 4.947)
 > Building 94% > :run
 ```
-3. Login as username `user` and password `user123`
+2. Login as username `user` and password `user123`
 
 Preview the app
 ----
