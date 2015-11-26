@@ -33,7 +33,7 @@ c.n.a.api.AndroidNvApiApplication        : Started AndroidNvApiApplication in 4.
 Preview the app
 ----
 1. Once started, a little popup will appear in the terminal window with the URL.
-2. Copy&Paste the URL you are seeing in the and open the page in a browser like FireFox.
+2. Copy & Paste the URL from the popup into a new tab or another browser like Firefox.
 3. Login as username `user` and password `user123`
 
 Relaunching the app
