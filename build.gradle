@@ -6,11 +6,11 @@ buildscript {
         mavenCentral()
     }
     dependencies {
-        classpath("org.springframework.boot:spring-boot-gradle-plugin:${springBootVersion}") 
+       	classpath("org.springframework.boot:spring-boot-gradle-plugin:${springBootVersion}") 
         classpath("io.spring.gradle:dependency-management-plugin:0.5.2.RELEASE")
-	classpath("org.owasp.encoder:encoder:1.2")
-	classpath("org.owasp.encoder:encoder-jsp:1.2")
-	classpath("org.owasp.esapi:esapi:2.0.1")
+	    classpath("org.owasp.encoder:encoder:1.2")
+	    classpath("org.owasp.encoder:encoder-jsp:1.2")
+	    classpath("org.owasp.esapi:esapi:2.0.1")
     }
 }
 
@@ -22,8 +22,7 @@ apply plugin: 'io.spring.dependency-management'
 apply plugin: 'war'
 
 jar {
-    baseName = 'android-nv-api'
-    version = '0.0.1-SNAPSHOT'
+    baseName = 'moneyx'
 }
 sourceCompatibility = 1.8
 targetCompatibility = 1.8
@@ -50,6 +49,7 @@ dependencies {
     runtime("org.apache.tomcat.embed:tomcat-embed-jasper")
 }
 
+logging.setLevel(LogLevel.WARN)
 
 eclipse {
     classpath {
