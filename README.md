@@ -22,7 +22,7 @@ MoneyX - an intentionally vulnerable payment application
 
 Quick Start (Cloud9)
 ----
-* Run ```gradle --console plain build run``` - Once the following text prints out from the gradle process
+* Run ```gradle --console plain build run``` - Watch for the following banner to print out from the gradle process
 ```
 :run
 

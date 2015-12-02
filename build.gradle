@@ -49,8 +49,6 @@ dependencies {
     runtime("org.apache.tomcat.embed:tomcat-embed-jasper")
 }
 
-//logging.setLevel(LogLevel.WARN)
-
 eclipse {
     classpath {
          containers.remove('org.eclipse.jdt.launching.JRE_CONTAINER')
