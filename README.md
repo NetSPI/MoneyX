@@ -22,10 +22,17 @@ MoneyX - an intentionally vulnerable payment application
 
 Quick Start (Cloud9)
 ----
-* Run ```gradle --console plain build run``` - Once the following text prints out from the gradle process (percentage can change)
+* Run ```gradle --console plain build run``` - Once the following text prints out from the gradle process
 ```
-s.b.c.e.t.TomcatEmbeddedServletContainer : Tomcat started on port(s): 8080 (http)
-c.n.a.api.AndroidNvApiApplication        : Started AndroidNvApiApplication in 4.659 seconds (JVM running for 4.947)
+:run
+
+  .   ____          _            __ _ _
+ /\\ / ___'_ __ _ _(_)_ __  __ _ \ \ \ \
+( ( )\___ | '_ | '_| | '_ \/ _` | \ \ \ \
+ \\/  ___)| |_)| | | | | || (_| |  ) ) ) )
+  '  |____| .__|_| |_|_| |_\__, | / / / /
+ =========|_|==============|___/=/_/_/_/
+ :: Spring Boot ::        (v1.2.4.RELEASE)
 ```
 * Login as username `user` and password `user123`
 
