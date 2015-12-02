@@ -19,7 +19,6 @@ apply plugin: 'eclipse'
 apply plugin: 'idea'
 apply plugin: 'spring-boot' 
 apply plugin: 'io.spring.dependency-management' 
-apply plugin: 'war'
 
 jar {
     baseName = 'moneyx'
@@ -39,6 +38,7 @@ dependencies {
     compile("org.springframework.security:spring-security-taglibs:4.0.2.RELEASE")
     compile("org.springframework.boot:spring-boot-starter-security")
     compile("org.springframework.session:spring-session-data-redis:1.0.1.RELEASE")
+    compile("log4j:log4j:1.2.17")
     compile("javax.servlet:jstl:1.2")
     compile("com.h2database:h2")
     compile("org.owasp.encoder:encoder:1.2")
@@ -49,7 +49,7 @@ dependencies {
     runtime("org.apache.tomcat.embed:tomcat-embed-jasper")
 }
 
-logging.setLevel(LogLevel.WARN)
+//logging.setLevel(LogLevel.WARN)
 
 eclipse {
     classpath {
